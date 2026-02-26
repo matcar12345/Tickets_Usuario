@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SoportePro — Reporte rápido</title>
+  <style>
+    :root{
+      --bg1:#0f172a; --bg2:#0b1220; --card:#0f172a88; --accent:#06b6d4; --glass:rgba(255,255,255,0.06);
+      --muted:rgba(255,255,255,0.6);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; min-height:100vh; background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:#e6eef8; display:flex; align-items:center; justify-content:center; padding:28px}
+    .container{width:100%; max-width:920px}
+    header{display:flex; align-items:center; gap:16px; margin-bottom:20px}
+    .logo{width:64px; height:64px; border-radius:14px; background:linear-gradient(135deg,var(--accent),#7c3aed); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; box-shadow:0 6px 18px rgba(12,18,32,0.6)}
+    h1{margin:0; font-size:20px}
+    p.lead{margin:0; color:var(--muted); font-size:13px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:20px; box-shadow: 0 10px 30px rgba(2,6,23,0.6); display:grid; grid-template-columns:1fr; gap:18px; align-items:start}
+    label{display:block; font-size:13px; color:var(--muted); margin-bottom:8px}
+    input[type=email], textarea{width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:var(--glass); color:inherit; outline:none; font-size:14px}
+    textarea{min-height:140px; resize:vertical}
+    .actions{display:flex; gap:10px; margin-top:12px; align-items:center}
+    .btn{padding:10px 14px; border-radius:10px; cursor:pointer; border:0; font-weight:600}
+    .btn.send{background:linear-gradient(90deg,var(--accent),#7c3aed); color:#042024}
+    .btn.ghost{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04)}
+    .mic-btn{display:inline-flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); cursor:pointer}
+    .mic-btn.recording{box-shadow:0 6px 20px rgba(124,58,237,0.18); transform:translateY(-1px)}
+    .note{font-size:12px; color:#ffd27d; margin-left:10px; display:none}
+    .loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:9999;border-radius:0}
+    .modal{background:linear-gradient(135deg,var(--accent),#7c3aed); border-radius:14px; padding:30px 40px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:12px; box-shadow:0 10px 30px rgba(0,0,0,0.5); color:#fff; font-size:18px}
+    .modal svg{width:50px;height:50px}
+    .modal p{margin:0;font-weight:600}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">SP</div>
+      <div>
+        <h1>SoportePro — Reporte rápido</h1>
+        <p class="lead">Envía tu correo laboral y describe el problema. Puedes dictarlo por audio.</p>
+      </div>
+    </header>
+    <main class="card" role="main">
+      <section>
+        <form id="supportForm">
+          <div style="margin-bottom:14px">
+            <label for="email">Correo laboral</label>
+            <input id="email" type="email" placeholder="ingresa tu correo" required />
+          </div>
+          <div style="margin-bottom:10px">
+            <label for="problem">Describe tu problema</label>
+            <textarea id="problem" placeholder="Escribe aquí los detalles..."></textarea>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px">
+            <button type="button" id="mic" class="mic-btn">🎙️ <span id="micLabel">Iniciar dictado</span></button>
+            <div class="note" id="recNote">Grabando... presiona el mic para detener.</div>
+          </div>
+          <div class="actions">
+            <button class="btn send" type="submit" id="sendBtn">Enviar</button>
+            <button class="btn ghost" type="button" id="clearBtn">Limpiar</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="modal" id="modalContent">
+      <p>Procesando caso...</p>
+    </div>
+  </div>
+  <script>
+(() => {
+  const email = document.getElementById('email');
+  const problem = document.getElementById('problem');
+  const micBtn = document.getElementById('mic');
+  const micLabel = document.getElementById('micLabel');
+  const recNote = document.getElementById('recNote');
+  const clearBtn = document.getElementById('clearBtn');
+  const sendBtn = document.getElementById('sendBtn');
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  const modalContent = document.getElementById('modalContent');
+
+  let recognition = null;
+  let recognizing = false;
+  let transcript = '';
+
+  try {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'es-CO';
+      recognition.interimResults = true;
+      recognition.continuous = false;
+      recognition.onstart = () => { recognizing = true; micBtn.classList.add('recording'); micLabel.textContent = 'Detener dictado'; recNote.style.display = 'block'; };
+      recognition.onend = () => { recognizing = false; micBtn.classList.remove('recording'); micLabel.textContent = 'Iniciar dictado'; recNote.style.display = 'none'; };
+      recognition.onresult = (event) => { let interim=''; for(let i=event.resultIndex;i<event.results.length;i++){ if(event.results[i].isFinal) transcript+=event.results[i][0].transcript; else interim+=event.results[i][0].transcript; } problem.value = transcript + (interim ? '\n'+interim : ''); };
+      recognition.onerror = (e) => { console.warn('Speech error', e); alert('Error en reconocimiento de voz: ' + (e.error || 'unknown')); };
+    } else { micBtn.style.display = 'none'; }
+  } catch(e) { micBtn.style.display = 'none'; }
+
+  micBtn.addEventListener('click', () => { if(!recognition) return; if(recognizing) recognition.stop(); else { transcript=''; recognition.start(); } });
+
+  document.getElementById('supportForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const obj = { email: email.value.trim(), problem: problem.value.trim(), audioUsed: !!transcript, transcript: transcript || null, timestamp: new Date().toISOString() };
+    const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    if(!emailPattern.test(obj.email)){ alert('Por favor ingresa un correo válido.'); email.focus(); return; }
+    const personalProviders=['gmail.com','hotmail.com','outlook.com','yahoo.com','icloud.com'];
+    const domain=obj.email.split('@')[1]?.toLowerCase();
+    if(personalProviders.includes(domain)){ if(!confirm('El correo parece de un proveedor personal ('+domain+'). ¿Deseas continuar con este correo?')) return; }
+
+    sendBtn.disabled = true;
+    modalContent.innerHTML = "<p>Procesando caso...</p>";
+    loadingOverlay.style.display = 'flex';
+
+    try{
+      const response = await fetch("http://10.51.3.42:8000/procesar_caso", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ descripcion: obj.problem, email: obj.email })
+      });
+      const data = await response.json();
+      modalContent.innerHTML = `
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        <p>Se ha creado su caso</p>`;
+    }catch(err){ console.error(err); modalContent.innerHTML = "<p>Error al procesar el caso</p>"; }
+    finally{
+      sendBtn.disabled = false;
+      const stored = JSON.parse(localStorage.getItem('soporte_reports') || '[]');
+      stored.push(obj);
+      localStorage.setItem('soporte_reports', JSON.stringify(stored));
+      setTimeout(()=>{ loadingOverlay.style.display='none'; email.value=''; problem.value=''; transcript=''; },1500);
+    }
+  });
+
+  clearBtn.addEventListener('click', ()=>{ if(confirm('Limpiar correo y descripción?')){ email.value=''; problem.value=''; transcript=''; } });
+})();
+  </script>
+</body>
+</html>
