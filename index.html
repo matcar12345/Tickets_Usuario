@@ -117,7 +117,7 @@
     loadingOverlay.style.display = 'flex';
 
     try{
-      const response = await fetch("http://10.51.3.42:8000/procesar_caso", {
+      const response = await fetch("http://pottiest-sonya-vitaceous.ngrok-free.dev/procesar_caso", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ descripcion: obj.problem, email: obj.email })
