@@ -185,7 +185,7 @@
 
     let recognition = null;
     let isRecognizing = false;
-    let finalTranscript = "";
+    let finalTranscript = "";  // Solo texto final acumulado
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -213,22 +213,31 @@
             micBtn.classList.remove("recording");
             micLabel.textContent = "Iniciar dictado";
             recNote.style.display = "none";
+            // Limpiamos cualquier interim pendiente al detener
+            problem.value = finalTranscript.trim();
         };
 
         recognition.onresult = (event) => {
-            let interim = "";
-            finalTranscript = problem.value.trim();
+            let interimTranscript = "";
+            let newFinalAdded = false;
 
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                const text = event.results[i][0].transcript;
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const transcriptPart = event.results[i][0].transcript;
                 if (event.results[i].isFinal) {
-                    finalTranscript += (finalTranscript ? " " : "") + text;
+                    // Solo agregamos si es nuevo (evitamos duplicados por eventos repetidos)
+                    if (!finalTranscript.endsWith(transcriptPart)) {
+                        finalTranscript += (finalTranscript ? " " : "") + transcriptPart;
+                        newFinalAdded = true;
+                    }
                 } else {
-                    interim += text;
+                    interimTranscript += transcriptPart;
                 }
             }
 
-            problem.value = finalTranscript + (interim ? " " + interim : "");
+            // Mostramos finales + interim actual (sin acumular interims viejos)
+            problem.value = finalTranscript + (interimTranscript ? " " + interimTranscript : "");
+
+            // Cursor al final
             problem.scrollTop = problem.scrollHeight;
             problem.selectionStart = problem.selectionEnd = problem.value.length;
         };
@@ -249,6 +258,7 @@
         if (isRecognizing) {
             recognition.stop();
         } else {
+            // Al iniciar, preservamos lo que ya hay como "final"
             finalTranscript = problem.value.trim();
             try {
                 recognition.start();
