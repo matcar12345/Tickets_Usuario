@@ -1,370 +1,283 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Inchcape Digital — Reporte rápido</title>
-
-  <style>
-
-    :root {
-      --bg1:#00233A;
-      --bg2:#001426;
-      --card:#00233A88;
-      --accent:#ED1C24;
-      --secondary:#952318;
-      --glass:rgba(255,255,255,0.06);
-      --muted:rgba(255,255,255,0.6);
-      font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;
-    }
-
-    * {
-      box-sizing:border-box;
-    }
-
-    body {
-      margin:0;
-      min-height:100vh;
-      background:linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:#e6eef8;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px;
-    }
-
-    .container {
-      width:100%;
-      max-width:920px;
-    }
-
-    header {
-      display:flex;
-      align-items:center;
-      gap:16px;
-      margin-bottom:20px;
-    }
-
-    .logo {
-      width:64px;
-      height:64px;
-      border-radius:14px;
-      background:linear-gradient(135deg,var(--accent),var(--secondary));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      font-size:20px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.4);
-      color:#fff;
-    }
-
-    h1 {
-      margin:0;
-      font-size:20px;
-      font-weight:600;
-    }
-
-    p.lead {
-      margin:0;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.4;
-    }
-
-    .card {
-      background:linear-gradient(
-        180deg,
-        rgba(255,255,255,0.03),
-        rgba(255,255,255,0.01)
-      );
-      border-radius:14px;
-      padding:20px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.5);
-      display:grid;
-      grid-template-columns:1fr;
-      gap:18px;
-    }
-
-    label {
-      display:block;
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:8px;
-      font-weight:500;
-    }
-
-    input[type=email],
-    textarea {
-      width:100%;
-      padding:12px 14px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:var(--glass);
-      color:inherit;
-      outline:none;
-      font-size:14px;
-      transition:border-color 0.3s,box-shadow 0.3s;
-    }
-
-    input[type=email]:focus,
-    textarea:focus {
-      border-color:var(--accent);
-      box-shadow:0 0 0 3px rgba(237,28,36,0.15);
-    }
-
-    textarea {
-      min-height:140px;
-      resize:vertical;
-    }
-
-    .actions {
-      display:flex;
-      gap:10px;
-      margin-top:12px;
-    }
-
-    .btn {
-      padding:10px 14px;
-      border-radius:10px;
-      cursor:pointer;
-      border:0;
-      font-weight:600;
-      transition:all 0.3s;
-    }
-
-    .btn.send {
-      background:linear-gradient(90deg,var(--accent),var(--secondary));
-      color:#fff;
-    }
-
-    .btn.ghost {
-      background:transparent;
-      color:var(--muted);
-      border:1px solid rgba(255,255,255,0.08);
-    }
-
-    .mic-btn {
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.08);
-      background:linear-gradient(
-        90deg,
-        rgba(255,255,255,0.03),
-        rgba(255,255,255,0.01)
-      );
-      cursor:pointer;
-      transition:all 0.3s;
-    }
-
-    .mic-btn.recording {
-      background:linear-gradient(90deg,#ED1C24,#ff4a4a);
-      box-shadow:0 0 0 4px rgba(237,28,36,0.25),0 0 20px rgba(237,28,36,0.6);
-      animation:pulse 1.2s infinite;
-    }
-
-    .note {
-      font-size:12px;
-      color:#ffd27d;
-      margin-left:10px;
-      display:none;
-    }
-
-    .loading-overlay {
-      position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:rgba(0,0,0,0.6);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-    }
-
-    .modal {
-      background:linear-gradient(135deg,var(--accent),var(--secondary));
-      border-radius:14px;
-      padding:30px 40px;
-      text-align:center;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:12px;
-      color:#fff;
-      font-size:18px;
-    }
-
-    @keyframes pulse {
-      0%{transform:scale(1)}
-      50%{transform:scale(1.05)}
-      100%{transform:scale(1)}
-    }
-
-  </style>
-
-</head>
-
-<body>
-
-  <div class="container">
-
-    <header>
-      <div class="logo">ID</div>
-
-      <div>
-        <h1>Inchcape Digital Andina North — Reporte rápido</h1>
-        <p class="lead">
-          Envía tu correo laboral y describe el problema. Puedes dictarlo por audio.
-        </p>
-      </div>
-    </header>
-
-    <main class="card">
-
-      <form id="supportForm">
-
-        <div>
-          <label for="email">Correo laboral</label>
-          <input id="email" type="email" placeholder="ingresa tu correo" required />
-        </div>
-
-        <div>
-          <label for="problem">Describe tu problema</label>
-          <textarea id="problem" placeholder="Escribe aquí los detalles..."></textarea>
-        </div>
-
-        <div style="display:flex;align-items:center;gap:12px;">
-
-          <button type="button" id="mic" class="mic-btn">
-            🎙️
-            <span id="micLabel">Iniciar dictado</span>
-          </button>
-
-          <div class="note" id="recNote">
-            Habla ahora...
-          </div>
-
-        </div>
-
-        <div class="actions">
-          <button class="btn send" type="submit">Enviar</button>
-          <button class="btn ghost" type="button" id="clearBtn">Limpiar</button>
-        </div>
-
-      </form>
-
-    </main>
-
-  </div>
-
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="modal" id="modalContent">
-      Procesando caso...
-    </div>
-  </div>
-
-<script>
-
-(() => {
-
-  const problem = document.getElementById("problem")
-  const micBtn = document.getElementById("mic")
-  const micLabel = document.getElementById("micLabel")
-  const recNote = document.getElementById("recNote")
-  const clearBtn = document.getElementById("clearBtn")
-
-  let recognition
-  let recognizing = false
-  let transcript = ""
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-
-  if (SpeechRecognition) {
-
-    recognition = new SpeechRecognition()
-
-    recognition.lang = "es-CO"
-    recognition.interimResults = true
-    recognition.continuous = true
-
-    recognition.onstart = () => {
-
-      recognizing = true
-
-      micBtn.classList.add("recording")
-      micLabel.textContent = "Escuchando..."
-      recNote.style.display = "block"
-
-    }
-
-    recognition.onend = () => {
-
-      recognizing = false
-
-      micBtn.classList.remove("recording")
-      micLabel.textContent = "Iniciar dictado"
-      recNote.style.display = "none"
-
-    }
-
-    recognition.onresult = (event) => {
-
-      let interim = ""
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-
-        const text = event.results[i][0].transcript
-
-        if (event.results[i].isFinal) {
-          transcript += text + " "
-        } else {
-          interim += text
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Inchcape Digital — Reporte rápido</title>
+    <style>
+        :root {
+            --bg1: #00233A;
+            --bg2: #001426;
+            --card: #00233A88;
+            --accent: #ED1C24;
+            --secondary: #952318;
+            --glass: rgba(255,255,255,0.06);
+            --muted: rgba(255,255,255,0.6);
+            font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
         }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--bg1), var(--bg2));
+            color: #e6eef8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 28px;
+        }
+        .container { width: 100%; max-width: 920px; }
+        header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+            color: #fff;
+        }
+        h1 { margin: 0; font-size: 20px; font-weight: 600; }
+        p.lead { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+        .card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+        label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
+        input[type=email], textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: var(--glass);
+            color: inherit;
+            outline: none;
+            font-size: 14px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type=email]:focus, textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(237,28,36,0.15);
+        }
+        textarea { min-height: 140px; resize: vertical; }
+        .actions { display: flex; gap: 10px; margin-top: 12px; }
+        .btn {
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 0;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn.send {
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            color: #fff;
+        }
+        .btn.send:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(237,28,36,0.3); }
+        .btn.ghost {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .btn.ghost:hover { border-color: var(--accent); color: #fff; }
+        .mic-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .mic-btn.recording {
+            background: linear-gradient(90deg,#ED1C24,#ff4a4a);
+            box-shadow: 0 0 0 4px rgba(237,28,36,0.25),0 0 20px rgba(237,28,36,0.6);
+            animation: pulse 1.2s infinite;
+        }
+        .note { font-size: 12px; color: #ffd27d; margin-left: 10px; display: none; }
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+        .modal {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            border-radius: 14px;
+            padding: 30px 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            font-size: 18px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">ID</div>
+        <div>
+            <h1>Inchcape Digital Andina North — Reporte rápido</h1>
+            <p class="lead">Envía tu correo laboral y describe el problema. Puedes dictarlo por audio.</p>
+        </div>
+    </header>
+    <main class="card">
+        <form id="supportForm">
+            <div>
+                <label for="email">Correo laboral</label>
+                <input id="email" type="email" placeholder="ingresa tu correo" required />
+            </div>
+            <div>
+                <label for="problem">Describe tu problema</label>
+                <textarea id="problem" placeholder="Escribe aquí los detalles..."></textarea>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <button type="button" id="mic" class="mic-btn">🎙️ <span id="micLabel">Iniciar dictado</span></button>
+                <div class="note" id="recNote">Habla ahora...</div>
+            </div>
+            <div class="actions">
+                <button class="btn send" type="submit">Enviar</button>
+                <button class="btn ghost" type="button" id="clearBtn">Limpiar</button>
+            </div>
+        </form>
+    </main>
+</div>
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="modal" id="modalContent">Procesando caso...</div>
+</div>
+<script>
+(() => {
+    const email = document.getElementById("email");
+    const problem = document.getElementById("problem");
+    const micBtn = document.getElementById("mic");
+    const micLabel = document.getElementById("micLabel");
+    const recNote = document.getElementById("recNote");
+    const clearBtn = document.getElementById("clearBtn");
+    const sendBtn = document.querySelector(".btn.send");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const modalContent = document.getElementById("modalContent");
 
-      }
+    let recognition;
+    let recognizing = false;
+    let transcript = "";
 
-      problem.value = transcript + interim
-
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SpeechRecognition){
+        recognition = new SpeechRecognition();
+        recognition.lang = "es-CO";
+        recognition.interimResults = true;
+        recognition.continuous = true;
+        recognition.onstart = () => {
+            recognizing = true;
+            micBtn.classList.add("recording");
+            micLabel.textContent = "Escuchando...";
+            recNote.style.display = "block";
+        };
+        recognition.onend = () => {
+            recognizing = false;
+            micBtn.classList.remove("recording");
+            micLabel.textContent = "Iniciar dictado";
+            recNote.style.display = "none";
+        };
+        recognition.onresult = (event) => {
+            let interim = "";
+            for(let i=event.resultIndex;i<event.results.length;i++){
+                const text = event.results[i][0].transcript;
+                if(event.results[i].isFinal){
+                    transcript += text + " ";
+                }else{
+                    interim += text;
+                }
+            }
+            problem.value = transcript + interim;
+        };
+        recognition.onerror = () => {
+            recognizing = false;
+            micBtn.classList.remove("recording");
+            micLabel.textContent = "Iniciar dictado";
+            recNote.style.display = "none";
+        };
+    }else{
+        micBtn.style.display = "none";
     }
 
-  }
+    micBtn.addEventListener("click", () => {
+        if(!recognition) return;
+        if(recognizing){
+            recognition.stop();
+            return;
+        }
+        transcript = problem.value + " ";
+        try { recognition.start(); } catch {}
+    });
 
-  micBtn.addEventListener("click", () => {
+    clearBtn.addEventListener("click", () => {
+        email.value = "";
+        problem.value = "";
+        transcript = "";
+    });
 
-    if (!recognition) return
-
-    if (recognizing) {
-
-      recognition.stop()
-      return
-
-    }
-
-    transcript = problem.value + " "
-
-    try {
-      recognition.start()
-    } catch {}
-
-  })
-
-  clearBtn.addEventListener("click", () => {
-
-    problem.value = ""
-    transcript = ""
-
-  })
-
-})()
-
+    document.getElementById("supportForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const obj = { email: email.value.trim(), problem: problem.value.trim(), audioUsed: !!transcript, transcript: transcript || null, timestamp: new Date().toISOString() };
+        const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if(!emailPattern.test(obj.email)){ alert("Por favor ingresa un correo válido."); email.focus(); return; }
+        const personalProviders = ["gmail.com","hotmail.com","outlook.com","yahoo.com","icloud.com"];
+        const domain = obj.email.split("@")[1]?.toLowerCase();
+        if(personalProviders.includes(domain)){ if(!confirm("El correo parece de un proveedor personal ("+domain+"). ¿Deseas continuar con este correo?")) return; }
+        sendBtn.disabled = true;
+        modalContent.innerHTML = "<p>Procesando caso...</p>";
+        loadingOverlay.style.display = "flex";
+        try{
+            const response = await fetch("https://levitra-pine-substantially-labor.trycloudflare.com/procesar_caso", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ descripcion: obj.problem, email: obj.email })
+            });
+            const data = await response.json();
+            if(!response.ok || data.status === "error"){
+                modalContent.innerHTML = `<p>Error al procesar<br>${data.message || 'Intenta de nuevo'}</p>`;
+            }else if(data.ticket?.TITULO_TEMA==="mensaje_no_valido" || !data.is_valid){
+                modalContent.innerHTML = "<p>No parece un problema técnico de soporte.<br>Por favor describe un inconveniente laboral.</p>";
+            }else{
+                modalContent.innerHTML = "<p>Se ha creado su caso</p>";
+            }
+        }catch{
+            modalContent.innerHTML = "<p>Error al procesar el caso<br>Revisa tu conexión</p>";
+        }finally{
+            sendBtn.disabled = false;
+            const stored = JSON.parse(localStorage.getItem("soporte_reports") || "[]");
+            stored.push(obj);
+            localStorage.setItem("soporte_reports", JSON.stringify(stored));
+            setTimeout(()=>{ loadingOverlay.style.display="none"; email.value=""; problem.value=""; transcript=""; }, 1800);
+        }
+    });
+})();
 </script>
-
 </body>
 </html>
