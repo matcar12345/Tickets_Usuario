@@ -9,35 +9,32 @@
       --bg1:#00233A; --bg2:#001426; --card:#00233A88; --accent:#ED1C24; --secondary:#952318; --glass:rgba(255,255,255,0.06);
       --muted:rgba(255,255,255,0.6);
       font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      font-size: 16px;
     }
     *{box-sizing:border-box}
-    body{margin:0; min-height:100vh; background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:#e6eef8; display:flex; align-items:center; justify-content:center; padding:2rem}
-    .container{width:100%; max-width:960px}
-    header{display:flex; align-items:center; gap:1.5rem; margin-bottom:1.5rem}
-    .logo{width:80px; height:80px; border-radius:1rem; background:linear-gradient(135deg,var(--accent),var(--secondary)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:2rem; box-shadow:0 8px 24px rgba(0,0,0,0.4); color:#fff}
-    h1{margin:0; font-size:1.5rem; font-weight:600}
-    p.lead{margin:0; color:var(--muted); font-size:0.875rem; line-height:1.4}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border-radius:1rem; padding:1.5rem; box-shadow: 0 12px 36px rgba(0,0,0,0.5); display:grid; grid-template-columns:1fr; gap:1.25rem}
-    label{display:block; font-size:0.875rem; color:var(--muted); margin-bottom:0.5rem; font-weight:500}
-    input[type=email], textarea{width:100%; padding:0.875rem 1rem; border-radius:0.75rem; border:1px solid rgba(255,255,255,0.08); background:var(--glass); color:inherit; outline:none; font-size:1rem; transition: border-color 0.3s, box-shadow 0.3s}
+    body{margin:0; min-height:100vh; background:linear-gradient(180deg,var(--bg1),var(--bg2)); color:#e6eef8; display:flex; align-items:center; justify-content:center; padding:28px}
+    .container{width:100%; max-width:920px}
+    header{display:flex; align-items:center; gap:16px; margin-bottom:20px}
+    .logo{width:64px; height:64px; border-radius:14px; background:linear-gradient(135deg,var(--accent),var(--secondary)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; box-shadow:0 6px 18px rgba(0,0,0,0.4); color:#fff}
+    h1{margin:0; font-size:20px; font-weight:600}
+    p.lead{margin:0; color:var(--muted); font-size:13px; line-height:1.4}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border-radius:14px; padding:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display:grid; grid-template-columns:1fr; gap:18px}
+    label{display:block; font-size:13px; color:var(--muted); margin-bottom:8px; font-weight:500}
+    input[type=email], textarea{width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:var(--glass); color:inherit; outline:none; font-size:14px; transition: border-color 0.3s, box-shadow 0.3s}
     input[type=email]:focus, textarea:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(237,28,36,0.15)}
-    textarea{min-height:160px; resize:vertical}
-    .field{margin-bottom:1rem}
-    .mic-group{display:flex; align-items:center; gap:1rem; margin-bottom:1rem}
-    .actions{display:flex; gap:1rem; margin-top:1rem}
-    .btn{padding:0.875rem 1.25rem; border-radius:0.75rem; cursor:pointer; border:0; font-weight:600; transition: all 0.3s; font-size:1rem}
+    textarea{min-height:140px; resize:vertical}
+    .actions{display:flex; gap:10px; margin-top:12px}
+    .btn{padding:10px 14px; border-radius:10px; cursor:pointer; border:0; font-weight:600; transition: all 0.3s}
     .btn.send{background:linear-gradient(90deg,var(--accent),var(--secondary)); color:#fff}
     .btn.send:hover{transform:translateY(-2px); box-shadow:0 6px 18px rgba(237,28,36,0.3)}
     .btn.ghost{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.08)}
     .btn.ghost:hover{border-color:var(--accent); color:#fff}
-    .mic-btn{display:inline-flex; align-items:center; gap:0.75rem; padding:0.875rem 1rem; border-radius:0.75rem; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); cursor:pointer; transition: all 0.3s; font-size:1rem}
+    .mic-btn{display:inline-flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); cursor:pointer; transition: all 0.3s}
     .mic-btn:hover{box-shadow:0 4px 12px rgba(237,28,36,0.1)}
-    .mic-btn.recording{box-shadow:0 8px 24px rgba(237,28,36,0.25); transform:translateY(-2px)}
-    .note{font-size:0.75rem; color:#ffd27d; margin-left:1rem; display:none}
+    .mic-btn.recording{box-shadow:0 6px 20px rgba(237,28,36,0.25); transform:translateY(-1px)}
+    .note{font-size:12px; color:#ffd27d; margin-left:10px; display:none}
     .loading-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:9999}
-    .modal{background:linear-gradient(135deg,var(--accent),var(--secondary)); border-radius:1rem; padding:2rem 3rem; text-align:center; display:flex; flex-direction:column; align-items:center; gap:1rem; box-shadow:0 12px 36px rgba(0,0,0,0.6); color:#fff; font-size:1.25rem; max-width:80%; animation:fadeIn 0.3s ease}
-    .modal svg{width:60px;height:60px; stroke:#fff}
+    .modal{background:linear-gradient(135deg,var(--accent),var(--secondary)); border-radius:14px; padding:30px 40px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:12px; box-shadow:0 10px 30px rgba(0,0,0,0.6); color:#fff; font-size:18px; animation:fadeIn 0.3s ease}
+    .modal svg{width:50px;height:50px; stroke:#fff}
     .modal p{margin:0;font-weight:600}
     @keyframes fadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
   </style>
@@ -54,15 +51,15 @@
     <main class="card" role="main">
       <section>
         <form id="supportForm">
-          <div class="field">
+          <div style="margin-bottom:14px">
             <label for="email">Correo laboral</label>
             <input id="email" type="email" placeholder="ingresa tu correo" required />
           </div>
-          <div class="field">
+          <div style="margin-bottom:10px">
             <label for="problem">Describe tu problema</label>
             <textarea id="problem" placeholder="Escribe aquí los detalles..."></textarea>
           </div>
-          <div class="mic-group">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px">
             <button type="button" id="mic" class="mic-btn">🎙️ <span id="micLabel">Iniciar dictado</span></button>
             <div class="note" id="recNote">Grabando... presiona el mic para detener.</div>
           </div>
