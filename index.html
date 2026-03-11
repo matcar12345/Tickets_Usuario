@@ -170,6 +170,7 @@
 <div class="loading-overlay" id="loadingOverlay">
     <div class="modal" id="modalContent">Procesando caso...</div>
 </div>
+
 <script>
 (() => {
     const email = document.getElementById("email");
@@ -182,74 +183,107 @@
     const loadingOverlay = document.getElementById("loadingOverlay");
     const modalContent = document.getElementById("modalContent");
 
-    let recognition;
-    let recognizing = false;
-    let transcript = "";
+    let recognition = null;
+    let isRecognizing = false;
+    let finalTranscript = "";
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(SpeechRecognition){
+
+    if (!SpeechRecognition) {
+        micBtn.style.display = "none";
+        return;
+    }
+
+    function initRecognition() {
         recognition = new SpeechRecognition();
         recognition.lang = "es-CO";
         recognition.interimResults = true;
         recognition.continuous = true;
+
         recognition.onstart = () => {
-            recognizing = true;
+            isRecognizing = true;
             micBtn.classList.add("recording");
-            micLabel.textContent = "Escuchando...";
-            recNote.style.display = "block";
+            micLabel.textContent = "Oprime para detener";
+            recNote.style.display = "inline";
+            recNote.textContent = "Escuchando... Habla ahora";
         };
+
         recognition.onend = () => {
-            recognizing = false;
+            isRecognizing = false;
             micBtn.classList.remove("recording");
             micLabel.textContent = "Iniciar dictado";
             recNote.style.display = "none";
         };
+
         recognition.onresult = (event) => {
             let interim = "";
-            for(let i=event.resultIndex;i<event.results.length;i++){
+            finalTranscript = problem.value.trim();
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
                 const text = event.results[i][0].transcript;
-                if(event.results[i].isFinal){
-                    transcript += text + " ";
-                }else{
+                if (event.results[i].isFinal) {
+                    finalTranscript += (finalTranscript ? " " : "") + text;
+                } else {
                     interim += text;
                 }
             }
-            problem.value = transcript + interim;
+
+            problem.value = finalTranscript + (interim ? " " + interim : "");
+            problem.scrollTop = problem.scrollHeight;
+            problem.selectionStart = problem.selectionEnd = problem.value.length;
         };
-        recognition.onerror = () => {
-            recognizing = false;
+
+        recognition.onerror = (event) => {
+            isRecognizing = false;
             micBtn.classList.remove("recording");
             micLabel.textContent = "Iniciar dictado";
             recNote.style.display = "none";
         };
-    }else{
-        micBtn.style.display = "none";
     }
 
     micBtn.addEventListener("click", () => {
-        if(!recognition) return;
-        if(recognizing){
-            recognition.stop();
-            return;
+        if (!recognition) {
+            initRecognition();
         }
-        transcript = problem.value + " ";
-        try { recognition.start(); } catch {}
+
+        if (isRecognizing) {
+            recognition.stop();
+        } else {
+            finalTranscript = problem.value.trim();
+            try {
+                recognition.start();
+            } catch (e) {
+                alert("No se pudo iniciar el micrófono. Revisa permisos.");
+            }
+        }
     });
 
     clearBtn.addEventListener("click", () => {
         email.value = "";
         problem.value = "";
-        transcript = "";
+        finalTranscript = "";
     });
 
     document.getElementById("supportForm").addEventListener("submit", async (e) => {
         e.preventDefault();
-        const obj = { email: email.value.trim(), problem: problem.value.trim(), audioUsed: !!transcript, transcript: transcript || null, timestamp: new Date().toISOString() };
+        const obj = { 
+            email: email.value.trim(), 
+            problem: problem.value.trim(), 
+            audioUsed: !!finalTranscript, 
+            transcript: finalTranscript || null, 
+            timestamp: new Date().toISOString() 
+        };
         const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-        if(!emailPattern.test(obj.email)){ alert("Por favor ingresa un correo válido."); email.focus(); return; }
+        if(!emailPattern.test(obj.email)){ 
+            alert("Por favor ingresa un correo válido."); 
+            email.focus(); 
+            return; 
+        }
         const personalProviders = ["gmail.com","hotmail.com","outlook.com","yahoo.com","icloud.com"];
         const domain = obj.email.split("@")[1]?.toLowerCase();
-        if(personalProviders.includes(domain)){ if(!confirm("El correo parece de un proveedor personal ("+domain+"). ¿Deseas continuar con este correo?")) return; }
+        if(personalProviders.includes(domain)){ 
+            if(!confirm("El correo parece de un proveedor personal ("+domain+"). ¿Deseas continuar con este correo?")) return; 
+        }
         sendBtn.disabled = true;
         modalContent.innerHTML = "<p>Procesando caso...</p>";
         loadingOverlay.style.display = "flex";
@@ -274,7 +308,12 @@
             const stored = JSON.parse(localStorage.getItem("soporte_reports") || "[]");
             stored.push(obj);
             localStorage.setItem("soporte_reports", JSON.stringify(stored));
-            setTimeout(()=>{ loadingOverlay.style.display="none"; email.value=""; problem.value=""; transcript=""; }, 1800);
+            setTimeout(()=>{ 
+                loadingOverlay.style.display="none"; 
+                email.value=""; 
+                problem.value=""; 
+                finalTranscript=""; 
+            }, 1800);
         }
     });
 })();
