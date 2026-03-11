@@ -100,10 +100,26 @@
       recognition.onstart = () => { recognizing = true; micBtn.classList.add('recording'); micLabel.textContent = 'Detener dictado'; recNote.style.display = 'block'; };
       recognition.onend = () => { recognizing = false; micBtn.classList.remove('recording'); micLabel.textContent = 'Iniciar dictado'; recNote.style.display = 'none'; };
       recognition.onresult = (event) => { let interim=''; for(let i=event.resultIndex;i<event.results.length;i++){ if(event.results[i].isFinal) transcript+=event.results[i][0].transcript; else interim+=event.results[i][0].transcript; } problem.value = transcript + (interim ? '\n'+interim : ''); };
-      recognition.onerror = (e) => { console.warn('Speech error', e); alert('Error en reconocimiento de voz: ' + (e.error || 'unknown')); };
+      recognition.onerror = (e) => { console.warn('Speech error', e); alert('Error en reconocimiento de voz: ' + (e.error || 'unknown')); recognizing = false; micBtn.classList.remove('recording'); micLabel.textContent = 'Iniciar dictado'; recNote.style.display = 'none'; };
     } else { micBtn.style.display = 'none'; }
   } catch(e) { micBtn.style.display = 'none'; }
-  micBtn.addEventListener('click', () => { if(!recognition) return; if(recognizing) recognition.stop(); else { transcript=''; recognition.start(); } });
+  micBtn.addEventListener('click', () => {
+    if(!recognition) return;
+    if(recognizing) {
+      recognition.stop();
+      recognizing = false;
+    } else {
+      transcript='';
+      try {
+        recognition.start();
+        recognizing = true;
+      } catch(e) {
+        recognizing = false;
+        console.error(e);
+        alert('Error al iniciar el reconocimiento: ' + e.message);
+      }
+    }
+  });
   document.getElementById('supportForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const obj = { email: email.value.trim(), problem: problem.value.trim(), audioUsed: !!transcript, transcript: transcript || null, timestamp: new Date().toISOString() };
