@@ -1,1357 +1,961 @@
 <!DOCTYPE html>
 <html lang="es">
-
-<style>
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-html,body{
-    width:100%;
-    height:100%;
-}
-
-body{
-
-    background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    color:white;
-
-    overflow:auto;
-
-    padding:30px;
-
-}
-
-section{
-
-    width:100%;
-    max-width:760px;
-
-    background:rgba(255,255,255,.08);
-
-    backdrop-filter:blur(18px);
-
-    border:1px solid rgba(255,255,255,.12);
-
-    border-radius:28px;
-
-    padding:50px;
-
-    box-shadow:
-
-    0 15px 45px rgba(0,0,0,.35);
-
-}
-
-
-#question-screen,
-#loading-screen,
-#result-screen,
-#evidence-screen{
-
-    display:none;
-
-}
-
-
-h1{
-
-    font-size:2.2rem;
-
-    font-weight:700;
-
-    margin-bottom:20px;
-
-}
-
-h2{
-
-    margin-bottom:15px;
-
-    font-weight:600;
-
-}
-
-h3{
-
-    font-weight:500;
-
-}
-
-p{
-
-    line-height:1.8;
-
-    opacity:.9;
-
-    margin-bottom:15px;
-
-}
-
-
-button{
-
-    border:none;
-
-    cursor:pointer;
-
-    border-radius:15px;
-
-    padding:16px 28px;
-
-    font-size:16px;
-
-    transition:.3s;
-
-    font-weight:600;
-
-}
-
-
-button:hover{
-
-    transform:translateY(-3px);
-
-}
-
-
-#btnStart,
-#btnNext,
-#btnYes{
-
-    background:#3b82f6;
-
-    color:white;
-
-}
-
-
-#btnStart:hover,
-#btnNext:hover,
-#btnYes:hover{
-
-    background:#2563eb;
-
-}
-
-
-#btnNo{
-
-    background:#ef4444;
-
-    color:white;
-
-}
-
-
-#btnNo:hover{
-
-    background:#dc2626;
-
-}
-
-#answersContainer{
-
-    display:grid;
-
-    gap:18px;
-
-    margin-top:35px;
-
-}
-
-
-.answer{
-
-    background:rgba(255,255,255,.08);
-
-    border:2px solid transparent;
-
-    padding:18px;
-
-    border-radius:15px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-
-.answer:hover{
-
-    background:rgba(255,255,255,.15);
-
-    border-color:#60a5fa;
-
-}
-
-
-.answer.selected{
-
-    background:#3b82f6;
-
-    border-color:white;
-
-}
-
-footer{
-
-    margin-top:45px;
-
-    display:flex;
-
-    justify-content:flex-end;
-
-}
-
-#progressBar{
-
-    width:100%;
-
-    height:10px;
-
-    background:rgba(255,255,255,.12);
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    margin-top:15px;
-
-    margin-bottom:35px;
-
-}
-
-
-#progressBar::after{
-
-    content:"";
-
-    display:block;
-
-    height:100%;
-
-    width:10%;
-
-    background:#3b82f6;
-
-}
-
-hr{
-
-    border:none;
-
-    height:1px;
-
-    background:rgba(255,255,255,.15);
-
-    margin:30px 0;
-
-}
-
-#result-screen h3{
-
-    color:#60a5fa;
-
-    margin-bottom:20px;
-
-}
-
-
-#result-screen button{
-
-    margin-top:25px;
-
-    margin-right:15px;
-
-}
-
-#loading-screen{
-
-    text-align:center;
-
-}
-
-#loading-screen h1{
-
-    margin-bottom:35px;
-
-}
-
-#loadingBar{
-
-    width:100%;
-    height:16px;
-
-    background:rgba(255,255,255,.12);
-
-    border-radius:50px;
-
-    overflow:hidden;
-
-    margin:35px 0;
-
-}
-
-#loadingProgress{
-
-    width:0%;
-
-    height:100%;
-
-    border-radius:50px;
-
-    background:linear-gradient(90deg,#3b82f6,#60a5fa,#93c5fd);
-
-    transition:width .4s;
-
-}
-
-#loadingMessage{
-
-    font-size:18px;
-
-    font-weight:500;
-
-    color:#cbd5e1;
-
-    min-height:28px;
-
-}
-
-#welcome-screen{
-
-    text-align:center;
-
-}
-
-#welcome-screen h3{
-
-    margin-bottom:30px;
-
-    color:#93c5fd;
-
-    font-weight:400;
-
-}
-
-#welcome-screen p{
-
-    max-width:550px;
-
-    margin:auto;
-
-    margin-bottom:18px;
-
-}
-
-
-#question-screen{
-
-    animation:fade .5s;
-
-}
-
-#questionCounter{
-
-    color:#93c5fd;
-
-}
-
-#questionTitle{
-
-    margin-top:20px;
-
-    min-height:120px;
-
-    display:flex;
-
-    align-items:center;
-
-}
-
-#result-screen{
-
-    animation:fade .6s;
-
-}
-
-#result-screen p{
-
-    margin-bottom:25px;
-
-}
-
-#result-screen div{
-
-    display:flex;
-
-    gap:15px;
-
-    justify-content:center;
-
-    margin-top:40px;
-
-}
-
-#evidence-screen{
-
-    text-align:center;
-
-    animation:fade .6s;
-
-}
-
-#evidence-screen h1{
-
-    color:#4ade80;
-
-    margin-bottom:25px;
-
-}
-
-#evidence-screen p{
-
-    margin-bottom:18px;
-
-}
-
-#evidence-screen button{
-
-    margin-top:25px;
-
-    background:#22c55e;
-
-    color:white;
-
-}
-
-#evidence-screen button:hover{
-
-    background:#16a34a;
-
-}
-
-.fade{
-
-    animation:fade .45s;
-
-}
-
-@keyframes fade{
-
-    from{
-
-        opacity:0;
-        transform:translateY(20px);
-
-    }
-
-    to{
-
-        opacity:1;
-        transform:translateY(0);
-
-    }
-
-}
-
-.pop{
-
-    animation:pop .35s;
-
-}
-
-@keyframes pop{
-
-    0%{
-
-        transform:scale(.8);
-        opacity:0;
-
-    }
-
-    100%{
-
-        transform:scale(1);
-        opacity:1;
-
-    }
-
-}
-
-.pulse{
-
-    animation:pulse 1.2s infinite;
-
-}
-
-@keyframes pulse{
-
-    0%{
-
-        transform:scale(1);
-
-    }
-
-    50%{
-
-        transform:scale(1.05);
-
-    }
-
-    100%{
-
-        transform:scale(1);
-
-    }
-
-}
-
-button:active{
-
-    transform:scale(.96);
-
-}
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:#0f172a;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:#3b82f6;
-
-    border-radius:50px;
-
-}
-
-@media(max-width:900px){
-
-    body{
-
-        padding:20px;
-
-        align-items:flex-start;
-
-    }
-
-    section{
-
-        padding:35px;
-
-        margin-top:40px;
-
-    }
-
-    h1{
-
-        font-size:30px;
-
-    }
-
-    h2{
-
-        font-size:22px;
-
-    }
-
-    p{
-
-        font-size:15px;
-
-    }
-
-    button{
-
-        width:100%;
-
-    }
-
-    footer{
-
-        justify-content:center;
-
-    }
-
-    #result-screen div{
-
-        flex-direction:column;
-
-    }
-
-}
-
-@media(max-width:600px){
-
-    section{
-
-        padding:25px;
-
-        border-radius:20px;
-
-    }
-
-    h1{
-
-        font-size:26px;
-
-    }
-
-    h2{
-
-        font-size:20px;
-
-    }
-
-    h3{
-
-        font-size:18px;
-
-    }
-
-    p{
-
-        font-size:14px;
-
-    }
-
-    button{
-
-        padding:15px;
-
-        font-size:15px;
-
-    }
-
-    #questionTitle{
-
-        min-height:auto;
-
-    }
-
-}
-
-section::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    border-radius:28px;
-
-    pointer-events:none;
-
-    background:linear-gradient(
-        180deg,
-        rgba(255,255,255,.08),
-        rgba(255,255,255,0)
-    );
-
-}
-
-section{
-
-    position:relative;
-
-}
-
-button{
-
-    user-select:none;
-
-}
-
-.answer{
-
-    user-select:none;
-
-}
-</style>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evaluación Oficial de Compatibilidad</title>
+
+    <title>Nuestra Historia ❤️</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            background:
+                radial-gradient(circle at top, #2b101a 0%, #14070c 45%, #080407 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+            background-size: 35px 35px;
+            opacity: 0.25;
+        }
+
+        .container {
+            width: min(1100px, 90%);
+            margin: auto;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero-heart {
+            font-size: 55px;
+            animation: heartbeat 1.7s infinite;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 8vw, 85px);
+            font-weight: 400;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #e8cfd5;
+            max-width: 650px;
+            line-height: 1.7;
+        }
+
+        .scroll-text {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #c89aa7;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* TIMELINE */
+
+        .timeline-section {
+            padding: 100px 0 150px;
+        }
+
+        .timeline-title {
+            text-align: center;
+            margin-bottom: 90px;
+        }
+
+        .timeline-title h2 {
+            font-size: 42px;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+
+        .timeline-title p {
+            color: #cfaab4;
+            font-size: 17px;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent,
+                #8e4558,
+                #d88ca0,
+                #8e4558,
+                transparent
+            );
+        }
+
+        .moment {
+            position: relative;
+            width: 50%;
+            padding: 30px 45px;
+        }
+
+        .moment:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .moment:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+
+        .moment-card {
+            background: rgba(255,255,255,0.055);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 18px;
+            padding: 25px;
+            cursor: pointer;
+            transition: 0.35s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .moment-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(234, 145, 168, 0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+        }
+
+        .moment-number {
+            color: #d88ca0;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .moment-card h3 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .moment-date {
+            color: #bd8b98;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .moment-card p {
+            color: #d8c5ca;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 55px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #e4a0b2;
+            border: 4px solid #16080d;
+            box-shadow: 0 0 20px rgba(228,160,178,0.8);
+            z-index: 2;
+        }
+
+        .moment:nth-child(odd) .timeline-dot {
+            right: -9px;
+        }
+
+        .moment:nth-child(even) .timeline-dot {
+            left: -9px;
+        }
+
+        /* MODAL / DETAIL */
+
+        .detail {
+            position: fixed;
+            inset: 0;
+            background: rgba(5,2,5,0.92);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .detail.active {
+            display: flex;
+        }
+
+        .detail-content {
+            width: min(1000px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(55,21,32,0.98),
+                    rgba(20,8,13,0.98)
+                );
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            animation: appear 0.4s ease;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.18);
+        }
+
+        .detail-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding: 0 40px;
+        }
+
+        .detail-header .number {
+            color: #d88ca0;
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .detail-header h2 {
+            font-size: clamp(32px, 6vw, 52px);
+            font-weight: 400;
+            margin: 10px 0;
+        }
+
+        .detail-header .date {
+            color: #b88c98;
+        }
+
+        .detail-text {
+            color: #eadce0;
+            line-height: 1.9;
+            font-size: 17px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            white-space: pre-line;
+            text-align: center;
+        }
+
+        /* BOTÓN PARA MOSTRAR RECUERDOS */
+
+        .memory-toggle {
+            display: block;
+            margin: 0 auto 25px;
+            padding: 12px 24px;
+            border: 1px solid rgba(216,140,160,0.45);
+            border-radius: 999px;
+            background: rgba(216,140,160,0.10);
+            color: #f4dbe1;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .memory-toggle:hover {
+            background: rgba(216,140,160,0.20);
+            border-color: rgba(216,140,160,0.75);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.22);
+        }
+
+        .memory-toggle:active {
+            transform: translateY(0);
+        }
+
+        /* GALERÍA */
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .gallery.collapsed {
+            display: none;
+        }
+
+        .gallery.revealed {
+            animation: galleryReveal 0.45s ease;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+            background: #241016;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.02);
+        }
+
+        .empty-message {
+            color: #8e727a;
+            text-align: center;
+            padding: 50px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            text-align: center;
+            padding: 80px 20px;
+            color: #b89099;
+        }
+
+        footer .footer-heart {
+            font-size: 35px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes galleryReveal {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ANIMACIONES */
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.1);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+
+            60% {
+                transform: scale(1.08);
+            }
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 750px) {
+
+            .timeline::before {
+                left: 15px;
+            }
+
+            .moment,
+            .moment:nth-child(even),
+            .moment:nth-child(odd) {
+                width: 100%;
+                left: 0;
+                text-align: left;
+                padding-left: 45px;
+                padding-right: 0;
+            }
+
+            .moment:nth-child(odd) .timeline-dot,
+            .moment:nth-child(even) .timeline-dot {
+                left: 6px;
+                right: auto;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery img {
+                height: 250px;
+            }
+
+            .detail-content {
+                padding: 25px 18px;
+            }
+
+            .detail-header {
+                padding: 0 25px;
+            }
+
+            .hero h1 {
+                letter-spacing: 1px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <section id="welcome-screen">
+    <!-- PORTADA -->
 
-        <h1>Encuesta Random</h1>
+    <section class="hero">
 
-        <h3>Versión 4.2.1</h3>
+        <div class="hero-heart">❤️</div>
 
-        <p>
-            Has sido seleccionada para participar en una evaluación totalmente seria😠.
-        </p>
+        <h1>Nuestra Historia</h1>
 
         <p>
-            Tus respuestas serán analizadas por nuestro avanzado sistema.
+            Cinco momentos, un montón de recuerdos
+            y una historia que todavía estamos escribiendo.
         </p>
 
-        <button id="btnStart">
-            Iniciar evaluación
-        </button>
+        <div class="scroll-text">
+            ↓ Desliza para comenzar ↓
+        </div>
 
     </section>
 
-    <section id="question-screen">
 
-        <header>
+    <!-- LINEA DEL TIEMPO -->
 
-            <h2 id="questionCounter">
-                Pregunta 1 de 10
-            </h2>
+    <section class="timeline-section">
 
-            <div id="progressBar"></div>
+        <div class="container">
 
-        </header>
+            <div class="timeline-title">
 
-        <main>
+                <h2>Lo nuestro</h2>
 
-            <h1 id="questionTitle">
-
-                Aquí aparecerá la pregunta
-
-            </h1>
-
-            <div id="answersContainer">
+                <p>
+                    Cada momento guarda algo que quiero recordar.
+                </p>
 
             </div>
 
-        </main>
 
-        <footer>
+            <div class="timeline" id="timeline">
 
-            <button id="btnNext">
+                <!-- Los momentos se generan automáticamente con JS -->
 
-                Siguiente →
-
-            </button>
-
-        </footer>
-
-    </section>
-
-    <section id="loading-screen">
-
-        <h1>
-
-            Corrigiendo respuestas para el beneficio del creador de la encuesta...
-
-        </h1>
-
-        <div id="loadingBar">
-
-            <div id="loadingProgress"></div>
-
-        </div>
-
-        <p id="loadingMessage">
-
-            Inicializando sistema...
-
-        </p>
-
-    </section>
-
-    <section id="result-screen">
-
-        <h1>
-
-            ANÁLISIS FINALIZADO
-
-        </h1>
-
-        <hr>
-
-        <h2>
-
-            Diagnóstico
-
-        </h2>
-
-        <p>
-
-            Se detectó un nivel considerablemente alto de atracción hacia el creador
-            de esta encuesta.
-
-        </p>
-
-        <h2>
-
-            Clasificación
-
-        </h2>
-
-        <h3>
-
-            ⚠ No deberías seguir soltera.
-
-        </h3>
-
-        <h2>
-
-            Tratamiento recomendado
-
-        </h2>
-
-        <h3>
-
-            Salir con el creador de esta encuesta.
-
-        </h3>
-
-        <h2>
-
-            Probabilidad de éxito
-
-        </h2>
-
-        <h3>
-
-            99.99%
-
-        </h3>
-
-        <div>
-
-            <button id="btnYes">
-
-                Sí, acepto el tratamiento
-
-            </button>
-
-            <button id="btnNo">
-
-                No por ahora
-
-            </button>
+            </div>
 
         </div>
 
     </section>
 
-    <section id="evidence-screen">
 
-    <div id="mensajeSistema">
+    <!-- VENTANA DE DETALLE -->
 
-        <h2>Actualizando diagnóstico...</h2>
+    <div class="detail" id="detail">
 
-        <p>Aplicando las últimas validaciones...</p>
+        <div class="detail-content">
 
-    </div>
+            <button class="close-btn" id="closeBtn">
+                ×
+            </button>
 
-    <div id="mensajeFinal" style="display:none;">
+            <div class="detail-header">
 
-        <h2 style="margin-top:25px;color:rgb(66, 66, 250);">
-            No hice esta página solo para hacerte reír.
-        </h2>
+                <div class="number" id="detailNumber"></div>
 
-        <hr>
+                <h2 id="detailTitle"></h2>
 
-        <p>
-            También la hice porque me importas.
-        </p>
+                <div class="date" id="detailDate"></div>
 
-        <p>
-            A veces soy muy bueno haciendo bromas, pero no tanto diciendo algunas cosas importantes.
-        </p>
+            </div>
 
-        <p>
-            Quería que supieras que disfruto muchísimo compartir tiempo contigo, hablar contigo y 
-            descubrir quién eres.
-        </p>
+            <div class="detail-text" id="detailText"></div>
 
-        <p>
-            Quería que supieras que disfruto muchísimo pasar tiempo contigo.
-        </p>
+            <button class="memory-toggle" id="memoryToggle" type="button">
+                Ver recuerdos ❤️
+            </button>
 
-        <p>
-            Me encanta hablar contigo, molestarte un poquito, hacerte reír y seguir
-            descubriendo la persona tan increíble que eres.
-        </p>
+            <div class="gallery collapsed" id="gallery"></div>
 
-        <p>
-            No quiero que ganen los malos recuerdos.
-        </p>
-
-        <h2 style="margin:30px 0;color:#60a5fa;">
-            Prefiero que gane este.
-        </h2>
-
-        <hr>
-
-        <h3>
-            📋 Última instrucción del sistema
-        </h3>
-
-        <p>
-            Se recomienda darle un abrazo al creador de esta encuesta
-            la próxima vez que lo vea.
-        </p>
-
-        <button id="btnEvidence">
-            📸 Enviar pantallazo de evidencia al creador, para sacarle una sonrisa. 
-        </button>
+        </div>
 
     </div>
 
-</section>
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-heart">
+            ❤️
+        </div>
+
+        <p>
+            Y esta historia todavía no termina...
+        </p>
+
+    </footer>
+
 
     <script>
 
-        const mensajeSistema = document.getElementById("mensajeSistema");
-const mensajeFinal = document.getElementById("mensajeFinal");
+        /*
+        ============================================================
+        DATOS DE LOS 5 MOMENTOS
+        ============================================================
 
-setTimeout(()=>{
+        Puedes cambiar:
 
-    mensajeSistema.innerHTML=`
-        <h2>El creador de esta encuesta quería decirte algo.</h2>
-    `;
+        title  = título
+        date   = fecha
+        text   = texto
+        images = hasta 4 imágenes
 
-},2000);
+        Las imágenes deben estar dentro de una carpeta llamada
+        "images".
 
-setTimeout(()=>{
+        Ejemplo:
 
-    document.body.style.transition="1s";
-    mensajeFinal.style.display="block";
+        proyecto/
+        │
+        ├── index.html
+        │
+        └── images/
+            ├── momento1-1.jpg
+            ├── momento1-2.jpg
+            ├── momento1-3.jpg
+            └── momento1-4.jpg
+        */
 
-},5500);
-
-        const preguntas = [
+        const moments = [
 
             {
-                pregunta: "¿Cómo describirías al creador de esta página?",
-                opciones: [
-                    "Muy guapo",
-                    "Exageradamente guapo",
-                    "Ridículamente guapo",
-                    "Necesito verificarlo en persona"
+                title: "Cuando todo comenzó",
+                date: "Nuestro comienzo",
+                text: `
+                    Aquí empezó algo que ninguno de los dos podía imaginar todo lo que llegaría a significar.
+
+                    Tal vez en ese momento todavía no sabía lo importante que ibas a terminar siendo para mí. Todo comenzó con una imagen, con tu foto de perfil. Y, desde ese instante, hubo algo en mí que supo que tú ibas a ser la mujer de mi vida.
+
+                    Pasaron muchos momentos antes de que finalmente pudiera hablar contigo, pero cuando por fin lo hice, descubrí que había mucho más de ti por conocer. No solo descubrí lo hermosa que eres, sino también la mujer que existe detrás de esa belleza: una mujer exquisita, con una mente que admiro y que, incluso desde entonces, comenzó a cautivarme de una manera que no sabía explicar.
+
+                    Y fue ahí cuando le prometí a Dios que tú ibas a ser mi mujer, mi esposa.
+
+                    Una promesa que hice con el corazón, sin saber todavía todo lo que llegaríamos a vivir, pero sabiendo que, si algún día tenía la oportunidad de compartir mi vida contigo, quería hacerlo de verdad.
+
+                    Y no pienso romper mi promesa.
+
+                `,
+                images: [
+                    "images/momento1-1.jpg",
+                    "images/momento1-2.jpg",
+                    "images/momento1-3.jpg",
+                    "images/momento1-4.jpg"
                 ]
             },
 
             {
-                pregunta: "Si tuvieras que cometer un crimen conmigo sería...",
-                opciones: [
-                    "Robarnos una pizza",
-                    "Desaparecer un fin de semana",
-                    "Asaltar una tienda de dulces",
-                    "Robarte una sonrisa cuenta como crimen"
+                title: "Las primeras veces",
+                date: "Nuestros primeros recuerdos",
+                text: `
+                    La primera vez que te vi fue algo muy hermoso para mí. No podía creer que, en persona, fueras incluso más hermosa de lo que había imaginado. Te veías físicamente perfecta, y recuerdo pensar que era increíble que realmente estuviera logrando que una mujer como tú se enamorara de mí.
+
+                    Desde el principio, tu familia también me agradó muchísimo. Me hicieron sentir bienvenido y, de alguna manera, hicieron que aquel día se sintiera todavía más especial.
+
+                    Recuerdo mucho nuestra primera vez en Gran Plaza. Estábamos los dos tan nerviosos que hasta decidir qué comer se volvió complicado. Terminamos pidiendo pizza, como si no existiera ninguna otra opción en todo el centro comercial. Y, para rematar, tuve que dejar que fueras tú quien me diera el primer beso jajaja. Así de nervioso me tenías.
+
+                    Pero, aunque hubo nervios, silencios y momentos en los que ninguno sabía muy bien qué hacer, no tengo dudas de que fue una de las mejores tardes que he vivido.
+
+                    Después pediste permiso para que pudiéramos ver juntos el partido de Colombia, y ese día terminó convirtiéndose en algo que todavía recuerdo con muchísimo cariño.
+
+                    Fue nuestro primer encuentro, y para mí, fue perfecto.
+
+                    A veces quisiera tener alguna imagen o alguna foto de ese día para poder volver a verlo, pero no la necesito realmente. Todas las imágenes de aquella tarde siguen guardadas en mi mente.
+
+                `,
+                images: [
+                    "images/momento2-1.jpg",
+                    "images/momento2-2.jpg",
+                    "images/momento2-3.jpg",
+                    "images/momento2-4.jpg"
                 ]
             },
 
             {
-                pregunta: "Tu primera impresión de mí fue...",
-                opciones: [
-                    "Se ve buena gente",
-                    "Tiene cara de hacer muchas bromas",
-                    "Creo que me va a meter en problemas",
-                    "Todas las anteriores"
+                title: "Lo que fuimos construyendo",
+                date: "Poco a poco",
+                text: `
+                    Con el tiempo empecé a sentir la necesidad de que lo nuestro tuviera un nombre, de que tú fueras oficialmente mi novia. No quería simplemente estar contigo; quería poder decirle a cualquiera, con todo el orgullo del mundo, que tú eras mi novia, que eras la mujer que había elegido para compartir mi vida.
+
+No sabía ni siquiera cómo decírtelo. Pensé en preparar una cena, quizá en un parque rodeado de zonas verdes, tal vez en tu casa con algunas decoraciones. Tenía tantas ideas en la cabeza que no sabía cuál sería la indicada.
+
+Pero un día fuimos tú y yo a Salitre Mágico, y yo no tenía pensado proponerte nada.
+
+Hasta que terminamos en la rueda gigante.
+
+Estábamos ahí arriba, viendo todo desde lo alto, y en menos de un segundo pensé:
+
+¿Por qué no aquí?
+¿Por qué no ahora?
+¿Por qué no en la cima de una rueda gigante?
+
+¿Por qué no hacer algo que ni siquiera yo mismo había imaginado?
+
+Y así, sin un plan perfecto, sin prepararlo durante semanas y sin saber exactamente cómo hacerlo, decidí que ese era el momento.
+
+Ese día fue hermoso. Te sentí tan cerca de mí, tan parte de mi vida, que todavía me cuesta explicar lo que significó. Incluso tuve la oportunidad de conocerte enojada, porque después de comer cambiaste completamente de humor jajajaja.
+
+Y, de alguna manera, hasta eso hizo que el día fuera perfecto.
+
+Porque no fue perfecto porque todo saliera exactamente como lo había imaginado. Fue perfecto porque eras tú, porque estábamos juntos y porque, en medio de todo aquello, terminé entendiendo algo que quizá ya sabía desde antes, pero que ese día sentí con mucha más fuerza:
+
+Lo nuestro era algo realmente especial.
+
+                `,
+                images: [
+                    "images/momento3-1.jpg",
+                    "images/momento3-2.jpg",
+                    "images/momento3-3.jpg",
+                    "images/momento3-4.jpg"
                 ]
             },
 
             {
-                pregunta: "¿Qué harías si te invito a salir?",
-                opciones: [
-                    "Preguntar la hora",
-                    "Preguntar el lugar",
-                    "Fingir que lo voy a pensar",
-                    "Ya estoy escogiendo qué ponerme"
+                title: "Tú",
+                date: "Una de mis partes favoritas de nosotros",
+                text: `
+                    Luego está aquel día en el que hicimos el amor.
+
+Antes de que sucediera hubo peleas, discusiones, desacuerdos, horarios que nunca parecían coincidir y, sobre todo, una mezcla de emociones que no sabía cómo manejar. Era mi primera vez, y durante la semana anterior sentí de todo: dudas, miedo, nervios y también muchas ganas. Pensaba demasiado en lo que iba a pasar, quizá porque no sabía cómo sería vivir algo así contigo.
+
+Pero cuando recuerdo ese día, hay una sensación que aparece antes que cualquier otra:
+
+Tranquilidad.
+
+Eso es lo que siento cuando estoy en intimidad contigo. Tranquilidad. Como si, por un momento, todo lo demás dejara de existir.
+
+No existe el trabajo, ni los complejos, ni los prejuicios, ni las peleas, ni el dinero, ni todas esas cosas que a veces pesan tanto sobre nosotros.
+
+Solo existimos tú y yo.
+
+Y el deseo de amarnos, de sentirnos, de hacernos bien y de compartir algo que pertenece únicamente a los dos.
+
+Para mí, eso es hacer el amor.
+
+Y fue contigo, por primera vez, que descubrí que podía sentirse así.
+
+                `,
+                images: [
+                    "images/momento4-1.jpg",
+                    "images/momento4-2.jpg",
+                    "images/momento4-3.jpg",
+                    "images/momento4-4.jpg"
                 ]
             },
 
             {
-                pregunta: "Escoge un color.",
-                colorCorrecto: 3,
-                opciones: [
-                    "🔴 Rojo",
-                    "🔵 Azul",
-                    "🟢 Verde",
-                    "⚫ Negro"
-                ]
-            },
+                title: "Lo que viene",
+                date: "Nuestra historia continúa",
+                text: `
+                    Y ahora...
 
-            {
-                pregunta: "Elige una recompensa.",
-                opciones: [
-                    "🍕 Pizza",
-                    "🍦 Helado",
-                    "🎮 Videojuegos",
-                    "🎬 Cine"
-                ]
-            },
+Ahora vivimos la maduración de nuestra relación. Peleamos, discutimos, estamos tensos y, en otros momentos, somos intensos. A veces estamos bien, otras veces no tanto. Hemos tenido días fáciles y días difíciles, momentos en los que pareciera que todo fluye y otros en los que nos cuesta incluso entendernos.
 
-            {
-                pregunta: "¿Qué tan confiable crees que es esta encuesta?",
-                opciones: [
-                    "Muchísimo",
-                    "Algo sospechosa",
-                    "Muy manipulada",
-                    "Creo que el resultado ya está decidido"
-                ]
-            },
+Pero hoy, en el presente, hay algo que sigue siendo hermoso gracias a ti:
 
-            {
-                pregunta: "¿Crees que el resultado será justo?",
-                opciones: [
-                    "Sí",
-                    "No",
-                    "Ya acepté mi destino"
+Te tengo en mi vida.
+
+Y por ti daría todo lo que estuviera en mis manos. El cielo, la tierra, incluso el infierno si fuera necesario. Porque hoy sé que hay cosas que pueden complicarnos, momentos que pueden hacernos tropezar y circunstancias que pueden ponernos a prueba, pero nada de eso cambia lo que siento por ti.
+
+Porque hoy, después de todo lo que hemos vivido, por fin puedo decirlo sin miedo:
+
+Te amo, Vivi.
+
+Te amo de verdad.
+
+No es falso, no es fingido, no es algo que digo porque sí. Es real. Lo siento en lo que pienso, en lo que hago y en la manera en que te has convertido en una parte tan importante de mi vida.
+
+Y hoy no existe otra mujer a la que quiera amar.
+
+Solo tú.
+
+Mi niña linda.
+
+                `,
+                images: [
+                    "images/img1.jpeg",
+                    "images/img2.jpeg",
+                    "images/img3.jpeg",
+                    "images/img4.jpeg"
                 ]
             }
 
         ];
 
-let indice = 0;
-let respuestas = [];
 
-const welcome = document.getElementById("welcome-screen");
-const questionScreen = document.getElementById("question-screen");
-const loadingScreen = document.getElementById("loading-screen");
-const resultScreen = document.getElementById("result-screen");
-const evidenceScreen = document.getElementById("evidence-screen");
+        /*
+        ============================================================
+        GENERAR LA LINEA DEL TIEMPO
+        ============================================================
+        */
 
-const btnStart = document.getElementById("btnStart");
-const btnNext = document.getElementById("btnNext");
+        const timeline = document.getElementById("timeline");
 
-const questionTitle = document.getElementById("questionTitle");
-const questionCounter = document.getElementById("questionCounter");
-const answersContainer = document.getElementById("answersContainer");
-const progressBar = document.getElementById("progressBar");
+        moments.forEach((moment, index) => {
 
-btnStart.addEventListener("click", iniciarEncuesta);
+            const article = document.createElement("article");
 
-btnNext.addEventListener("click", siguientePregunta);
+            article.className = "moment";
 
-btnNext.disabled = true;
+            article.innerHTML = `
 
-function iniciarEncuesta(){
+                <div class="timeline-dot"></div>
 
-    welcome.style.display = "none";
+                <div class="moment-card" onclick="openMoment(${index})">
 
-    questionScreen.style.display = "block";
+                    <div class="moment-number">
+                        Momento ${index + 1}
+                    </div>
 
-    renderPregunta();
+                    <h3>
+                        ${moment.title}
+                    </h3>
 
-}
+                    <div class="moment-date">
+                        ${moment.date}
+                    </div>
 
-function renderPregunta(){
+                    <p>
+                        Haz clic para recordar este momento ❤️
+                    </p>
 
-    btnNext.disabled = true;
+                </div>
+            `;
 
-    const actual = preguntas[indice];
+            timeline.appendChild(article);
 
-    questionCounter.textContent =
-        `Pregunta ${indice + 1} de ${preguntas.length}`;
+        });
 
-    questionTitle.textContent = actual.pregunta;
 
-    answersContainer.innerHTML = "";
+        /*
+        ============================================================
+        ELEMENTOS DEL DETALLE
+        ============================================================
+        */
 
-    actual.opciones.forEach((texto,i)=>{
+        const detail = document.getElementById("detail");
+        const closeBtn = document.getElementById("closeBtn");
 
-        const div = document.createElement("div");
+        const detailNumber = document.getElementById("detailNumber");
+        const detailTitle = document.getElementById("detailTitle");
+        const detailDate = document.getElementById("detailDate");
+        const detailText = document.getElementById("detailText");
+        const gallery = document.getElementById("gallery");
+        const memoryToggle = document.getElementById("memoryToggle");
 
-        div.className = "answer";
 
-        div.textContent = texto;
+        /*
+        ============================================================
+        ABRIR MOMENTO
+        ============================================================
+        */
 
-        div.addEventListener("click",()=>seleccionar(div,i));
+        function openMoment(index) {
 
-        answersContainer.appendChild(div);
+            const moment = moments[index];
 
-    });
+            detailNumber.textContent = `Momento ${index + 1}`;
 
-    actualizarBarra();
+            detailTitle.textContent = moment.title;
 
-}
+            detailDate.textContent = moment.date;
 
-function seleccionar(elemento, opcion){
+            detailText.textContent = moment.text;
 
-    const actual = preguntas[indice];
+            gallery.innerHTML = "";
+            gallery.classList.remove("revealed");
+            gallery.classList.add("collapsed");
+            memoryToggle.textContent = "Ver recuerdos ❤️";
 
-    // Si la pregunta tiene una respuesta obligatoria
-    if(actual.colorCorrecto !== undefined){
 
-        if(opcion !== actual.colorCorrecto){
+            /*
+            Solo mostramos imágenes que realmente existan
+            en el array.
+            */
 
-            alert("❌ Opción incorrecta señorita, vuelve a intentar.");
+            moment.images.forEach((image) => {
 
-            return;
+                if (!image) return;
+
+                const img = document.createElement("img");
+
+                img.src = image;
+
+                img.alt = moment.title;
+
+                img.onerror = function () {
+
+                    this.style.display = "none";
+
+                };
+
+                img.onclick = function () {
+
+                    window.open(image, "_blank");
+
+                };
+
+                gallery.appendChild(img);
+
+            });
+
+
+            detail.classList.add("active");
+
+            document.body.style.overflow = "hidden";
         }
 
-    }
 
-    document.querySelectorAll(".answer").forEach(a=>{
+        /*
+        ============================================================
+        MOSTRAR / OCULTAR RECUERDOS
+        ============================================================
+        */
 
-        a.classList.remove("selected");
+        memoryToggle.addEventListener("click", function() {
 
-    });
+            const isCollapsed = gallery.classList.contains("collapsed");
 
-    elemento.classList.add("selected");
+            if (isCollapsed) {
 
-    respuestas[indice] = opcion;
+                gallery.classList.remove("collapsed");
+                gallery.classList.remove("revealed");
 
-    btnNext.disabled = false;
+                // Reinicia la animación al abrir.
+                void gallery.offsetWidth;
 
-}
+                gallery.classList.add("revealed");
 
-function actualizarBarra(){
+                memoryToggle.textContent = "Ocultar recuerdos ↑";
 
-    const porcentaje =
-        ((indice + 1) / preguntas.length) * 100;
+            } else {
 
-    progressBar.innerHTML =
+                gallery.classList.remove("revealed");
+                gallery.classList.add("collapsed");
 
-        `<div style="
-        width:${porcentaje}%;
-        height:100%;
-        background:#3b82f6;
-        border-radius:20px;
-        transition:.4s;
-        "></div>`;
-
-}
-
-function siguientePregunta(){
-
-    indice++;
-
-    if(indice >= preguntas.length){
-
-        questionScreen.style.display="none";
-
-        loadingScreen.style.display="block";
-
-        mostrarCarga();
-
-        return;
-
-    }
-
-    renderPregunta();
-
-}
-
-const pasosAnalisis = [
-
-    "Analizando respuestas...",
-    "Verificando autenticidad...",
-    "Consultando base de datos...",
-    "Buscando coincidencias...",
-    "Corrigiendo respuestas para favorecer al creador...",
-    "Ocultando evidencia...",
-    "Generando diagnóstico..."
-
-];
-
-const loadingProgress = document.getElementById("loadingProgress");
-const loadingMessage = document.getElementById("loadingMessage");
-
-function mostrarCarga(){
-
-    let progreso = 0;
-
-    let paso = 0;
-
-    loadingProgress.style.width = "0%";
-
-    loadingMessage.textContent = pasosAnalisis[0];
-
-    const intervalo = setInterval(()=>{
-
-        progreso += Math.floor(Math.random()*8)+5;
-
-        if(progreso > 100){
-
-            progreso = 100;
-
-        }
-
-        loadingProgress.style.width = progreso + "%";
-
-        if(
-            paso < pasosAnalisis.length-1 &&
-            progreso >= ((paso+1)*(100/pasosAnalisis.length))
-        ){
-
-            paso++;
-
-            loadingMessage.textContent = pasosAnalisis[paso];
-
-        }
-
-        if(progreso >= 100){
-
-            clearInterval(intervalo);
-
-            setTimeout(()=>{
-
-                loadingScreen.style.display="none";
-
-                resultScreen.style.display="block";
-
-                mostrarResultado();
-
-            },900);
-
-        }
-
-    },250);
-
-}
-
-const tituloResultado = document.getElementById("tituloResultado");
-const resultadoTexto = document.getElementById("resultadoTexto");
-const clasificacion = document.getElementById("clasificacion");
-const tratamiento = document.getElementById("tratamiento");
-const probabilidad = document.getElementById("probabilidad");
-
-const btnYes = document.getElementById("btnYes");
-const btnNo = document.getElementById("btnNo");
-
-
-function escribirTexto(elemento, texto, velocidad = 25){
-
-    return new Promise(resolve=>{
-
-        elemento.textContent="";
-
-        let i=0;
-
-        const timer=setInterval(()=>{
-
-            elemento.textContent += texto.charAt(i);
-
-            i++;
-
-            if(i>=texto.length){
-
-                clearInterval(timer);
-
-                resolve();
+                memoryToggle.textContent = "Ver recuerdos ❤️";
 
             }
 
-        },velocidad);
+        });
 
-    });
 
-}
+        /*
+        ============================================================
+        CERRAR
+        ============================================================
+        */
 
-async function mostrarResultado(){
+        function closeMoment() {
 
-    tituloResultado.textContent="ANÁLISIS FINALIZADO";
+            detail.classList.remove("active");
 
-    resultadoTexto.textContent="";
-    clasificacion.textContent="";
-    tratamiento.textContent="";
-    probabilidad.textContent="";
+            document.body.style.overflow = "";
 
-    await escribirTexto(
-        resultadoTexto,
-        "✔ Compatibilidad detectada..."
-    );
+        }
 
-    await pausa(500);
 
-    await escribirTexto(
-        resultadoTexto,
-        resultadoTexto.textContent +
-        "\n\n✔ Sentido del humor compatible..."
-    );
+        closeBtn.addEventListener("click", closeMoment);
 
-    await pausa(500);
 
-    await escribirTexto(
-        resultadoTexto,
-        resultadoTexto.textContent +
-        "\n\n✔ Química detectada..."
-    );
+        /*
+        Cerrar haciendo clic fuera de la ventana
+        */
 
-    await pausa(800);
+        detail.addEventListener("click", function(event) {
 
-    await escribirTexto(
-        resultadoTexto,
-        resultadoTexto.textContent +
-        "\n\nSe detectó un nivel considerablemente alto de atracción hacia el creador de esta encuesta."
-    );
+            if (event.target === detail) {
 
-    await pausa(500);
+                closeMoment();
 
-    await escribirTexto(
-        clasificacion,
-        "⚠ NO DEBERÍAS SEGUIR SOLTERA."
-    );
+            }
 
-    await pausa(600);
+        });
 
-    await escribirTexto(
-        tratamiento,
-        "Salir con el creador de esta encuesta 😌"
-    );
 
-    await pausa(600);
+        /*
+        Cerrar con ESC
+        */
 
-    await escribirTexto(
-        probabilidad,
-        "99.99%"
-    );
+        document.addEventListener("keydown", function(event) {
 
-}
+            if (event.key === "Escape") {
 
-function pausa(ms){
+                closeMoment();
 
-    return new Promise(resolve=>{
+            }
 
-        setTimeout(resolve,ms);
-
-    });
-
-}
-
-btnYes.addEventListener("click",()=>{
-
-    resultScreen.style.display="none";
-
-    evidenceScreen.style.display="block";
-
-});
-
-btnNo.addEventListener("click",()=>{
-
-    alert("Ni tú te la crees, vuelve a intentar");
-
-});
+        });
 
     </script>
 
 </body>
-
 </html>
