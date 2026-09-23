@@ -1,133 +1,339 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Nuestra Historia ❤️</title>
 
     <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: Georgia, 'Times New Roman', serif;
+
             background:
-                radial-gradient(circle at top, #2b101a 0%, #14070c 45%, #080407 100%);
+                radial-gradient(
+                    circle at top,
+                    #35131f 0%,
+                    #1c0b12 38%,
+                    #0d0509 72%,
+                    #060204 100%
+                );
+
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
         }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+
+        /* =========================================================
+           FONDO
+        ========================================================= */
 
         body::before {
             content: "";
             position: fixed;
             inset: 0;
             pointer-events: none;
+
             background-image:
-                radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-            background-size: 35px 35px;
-            opacity: 0.25;
+                radial-gradient(
+                    circle,
+                    rgba(255,255,255,0.07) 1px,
+                    transparent 1px
+                );
+
+            background-size: 38px 38px;
+            opacity: 0.20;
+
+            z-index: 0;
         }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(216,140,160,0.07),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 80% 70%,
+                    rgba(216,140,160,0.05),
+                    transparent 28%
+                );
+
+            z-index: 0;
+        }
+
+
+        /* =========================================================
+           CONTENEDOR
+        ========================================================= */
 
         .container {
             width: min(1100px, 90%);
             margin: auto;
+            position: relative;
+            z-index: 1;
         }
 
-        /* HERO */
+
+        /* =========================================================
+           HERO
+        ========================================================= */
 
         .hero {
             min-height: 100vh;
+
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+
             text-align: center;
+
             padding: 40px 20px;
+
+            position: relative;
+            z-index: 1;
+
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(216,140,160,0.12),
+                    transparent 68%
+                );
+
+            filter: blur(20px);
+
+            animation:
+                heroGlow 6s ease-in-out infinite alternate;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+
+            animation:
+                heroEntrance 1.2s
+                cubic-bezier(.2,.8,.2,1);
         }
 
         .hero-heart {
-            font-size: 55px;
-            animation: heartbeat 1.7s infinite;
-            margin-bottom: 20px;
+            font-size: 58px;
+
+            margin-bottom: 22px;
+
+            filter:
+                drop-shadow(
+                    0 0 14px
+                    rgba(255,100,140,0.4)
+                );
+
+            animation:
+                heartbeat 1.8s infinite,
+                heartFloat 4s ease-in-out infinite;
         }
 
         .hero h1 {
-            font-size: clamp(45px, 8vw, 85px);
+            font-size:
+                clamp(48px, 8vw, 85px);
+
             font-weight: 400;
+
             letter-spacing: 4px;
-            margin-bottom: 15px;
+
+            margin-bottom: 20px;
+
+            color: #fff;
+
+            text-shadow:
+                0 8px 35px rgba(0,0,0,0.45);
+
+            animation:
+                titleGlow 4s ease-in-out infinite alternate;
         }
 
         .hero p {
             font-size: 20px;
+
             color: #e8cfd5;
-            max-width: 650px;
-            line-height: 1.7;
+
+            max-width: 680px;
+
+            line-height: 1.8;
+
+            margin: auto;
         }
 
         .scroll-text {
-            margin-top: 60px;
-            font-size: 14px;
+            margin-top: 65px;
+
+            font-size: 13px;
+
             color: #c89aa7;
+
             letter-spacing: 3px;
+
             text-transform: uppercase;
+
+            animation:
+                floating 2.5s ease-in-out infinite;
         }
 
-        /* TIMELINE */
+
+        /* =========================================================
+           TIMELINE
+        ========================================================= */
 
         .timeline-section {
-            padding: 100px 0 150px;
+            padding: 110px 0 150px;
+
+            position: relative;
+            z-index: 1;
         }
 
         .timeline-title {
             text-align: center;
+
             margin-bottom: 90px;
+
+            animation:
+                sectionAppear 1s ease;
         }
 
         .timeline-title h2 {
-            font-size: 42px;
+            font-size: 44px;
+
             font-weight: 400;
+
             margin-bottom: 12px;
         }
 
         .timeline-title p {
             color: #cfaab4;
+
             font-size: 17px;
         }
 
         .timeline {
             position: relative;
-            max-width: 900px;
+
+            max-width: 1000px;
+
             margin: auto;
         }
 
         .timeline::before {
             content: "";
+
             position: absolute;
+
             left: 50%;
             top: 0;
+
             transform: translateX(-50%);
+
             width: 2px;
             height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent,
-                #8e4558,
-                #d88ca0,
-                #8e4558,
-                transparent
-            );
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    transparent,
+                    #8e4558,
+                    #d88ca0,
+                    #8e4558,
+                    transparent
+                );
+
+            box-shadow:
+                0 0 16px rgba(216,140,160,0.18);
         }
+
+
+        /* =========================================================
+           MOMENTOS
+        ========================================================= */
 
         .moment {
             position: relative;
+
             width: 50%;
-            padding: 30px 45px;
+
+            padding: 35px 50px;
+
+            opacity: 0;
+
+            transform: translateY(50px);
+
+            transition:
+                opacity 0.8s ease,
+                transform 0.8s
+                cubic-bezier(.2,.8,.2,1);
+        }
+
+        .moment.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .moment:nth-child(1) {
+            transition-delay: 0.05s;
+        }
+
+        .moment:nth-child(2) {
+            transition-delay: 0.10s;
+        }
+
+        .moment:nth-child(3) {
+            transition-delay: 0.15s;
+        }
+
+        .moment:nth-child(4) {
+            transition-delay: 0.20s;
+        }
+
+        .moment:nth-child(5) {
+            transition-delay: 0.25s;
         }
 
         .moment:nth-child(odd) {
@@ -140,58 +346,188 @@
             text-align: left;
         }
 
+
+        /* =========================================================
+           TARJETAS
+        ========================================================= */
+
         .moment-card {
-            background: rgba(255,255,255,0.055);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 18px;
-            padding: 25px;
+            position: relative;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.065),
+                    rgba(255,255,255,0.025)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.10);
+
+            border-radius: 22px;
+
+            padding: 30px;
+
             cursor: pointer;
-            transition: 0.35s ease;
-            backdrop-filter: blur(8px);
+
+            backdrop-filter: blur(10px);
+
+            box-shadow:
+                0 12px 35px rgba(0,0,0,0.18);
+
+            overflow: hidden;
+
+            transition:
+                transform 0.4s
+                cubic-bezier(.2,.8,.2,1),
+                border-color 0.4s ease,
+                box-shadow 0.4s ease,
+                background 0.4s ease;
+        }
+
+        .moment-card::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -120%;
+
+            width: 100%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    100deg,
+                    transparent,
+                    rgba(255,255,255,0.08),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition:
+                left 0.7s ease;
+
+            pointer-events: none;
+        }
+
+        .moment-card:hover::before {
+            left: 120%;
         }
 
         .moment-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(234, 145, 168, 0.5);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+            transform:
+                translateY(-9px)
+                scale(1.015);
+
+            border-color:
+                rgba(234,145,168,0.42);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.085),
+                    rgba(255,255,255,0.035)
+                );
+
+            box-shadow:
+                0 25px 55px rgba(0,0,0,0.35),
+                0 0 30px rgba(216,140,160,0.07);
         }
 
         .moment-number {
             color: #d88ca0;
-            font-size: 13px;
-            letter-spacing: 3px;
+
+            font-size: 12px;
+
+            letter-spacing: 4px;
+
             text-transform: uppercase;
-            margin-bottom: 12px;
+
+            margin-bottom: 14px;
         }
 
         .moment-card h3 {
             font-size: 28px;
+
             font-weight: 400;
+
             margin-bottom: 10px;
+
+            transition:
+                color 0.3s ease,
+                transform 0.3s ease;
+        }
+
+        .moment-card:hover h3 {
+            color: #f6d5de;
+
+            transform:
+                translateY(-2px);
         }
 
         .moment-date {
             color: #bd8b98;
+
             font-size: 14px;
-            margin-bottom: 15px;
+
+            margin-bottom: 17px;
         }
 
-        .moment-card p {
+        .moment-hint {
             color: #d8c5ca;
-            line-height: 1.6;
-            font-size: 15px;
+
+            line-height: 1.65;
+
+            font-size: 14px;
         }
+
+        .moment-hint span {
+            color: #e4a0b2;
+
+            display: inline-block;
+
+            animation:
+                tinyHeart 2s
+                ease-in-out infinite;
+        }
+
+
+        /* =========================================================
+           PUNTO DE TIMELINE
+        ========================================================= */
 
         .timeline-dot {
             position: absolute;
-            top: 55px;
+
+            top: 70px;
+
             width: 18px;
             height: 18px;
+
             border-radius: 50%;
-            background: #e4a0b2;
-            border: 4px solid #16080d;
-            box-shadow: 0 0 20px rgba(228,160,178,0.8);
+
+            background:
+                radial-gradient(
+                    circle,
+                    #ffe8ee,
+                    #e4a0b2 50%,
+                    #9f566e
+                );
+
+            border:
+                4px solid #16080d;
+
+            box-shadow:
+                0 0 18px rgba(228,160,178,0.8),
+                0 0 38px rgba(228,160,178,0.22);
+
             z-index: 2;
+
+            animation:
+                dotPulse 2.5s
+                ease-in-out infinite;
         }
 
         .moment:nth-child(odd) .timeline-dot {
@@ -202,126 +538,268 @@
             left: -9px;
         }
 
-        /* MODAL / DETAIL */
+
+        /* =========================================================
+           MODAL
+        ========================================================= */
 
         .detail {
             position: fixed;
+
             inset: 0;
-            background: rgba(5,2,5,0.92);
+
+            background:
+                rgba(5,2,5,0.94);
+
             display: none;
+
             justify-content: center;
             align-items: center;
-            padding: 30px;
+
+            padding: 25px;
+
             z-index: 1000;
+
             overflow-y: auto;
+
+            backdrop-filter:
+                blur(10px);
+
+            opacity: 0;
         }
 
         .detail.active {
             display: flex;
+
+            animation:
+                modalBackground 0.35s ease forwards;
         }
 
         .detail-content {
-            width: min(1000px, 100%);
-            max-height: 90vh;
+            width:
+                min(1000px, 100%);
+
+            max-height: 92vh;
+
             overflow-y: auto;
+
             background:
                 linear-gradient(
                     145deg,
                     rgba(55,21,32,0.98),
                     rgba(20,8,13,0.98)
                 );
-            border: 1px solid rgba(255,255,255,0.12);
+
+            border:
+                1px solid rgba(255,255,255,0.12);
+
             border-radius: 24px;
-            padding: 40px;
+
+            padding: 45px;
+
             position: relative;
-            animation: appear 0.4s ease;
+
+            box-shadow:
+                0 30px 100px rgba(0,0,0,0.55);
+
+            transform:
+                translateY(30px)
+                scale(0.97);
+
+            animation:
+                modalAppear 0.45s
+                cubic-bezier(.2,.8,.2,1)
+                forwards;
         }
+
+
+        /* =========================================================
+           BOTÓN CERRAR
+        ========================================================= */
 
         .close-btn {
             position: absolute;
-            right: 25px;
+
+            right: 24px;
             top: 20px;
+
             width: 40px;
             height: 40px;
+
             border: none;
+
             border-radius: 50%;
-            background: rgba(255,255,255,0.08);
+
+            background:
+                rgba(255,255,255,0.08);
+
             color: white;
+
             font-size: 24px;
+
             cursor: pointer;
-            transition: 0.2s;
+
+            transition:
+                background 0.2s ease,
+                transform 0.3s ease;
+
+            z-index: 5;
         }
 
         .close-btn:hover {
-            background: rgba(255,255,255,0.18);
+            background:
+                rgba(255,255,255,0.18);
+
+            transform:
+                rotate(90deg)
+                scale(1.05);
         }
+
+
+        /* =========================================================
+           CABECERA DEL MOMENTO
+        ========================================================= */
 
         .detail-header {
             text-align: center;
-            margin-bottom: 35px;
-            padding: 0 40px;
+
+            margin-bottom: 38px;
+
+            padding:
+                15px 40px 0;
         }
 
         .detail-header .number {
             color: #d88ca0;
+
             font-size: 13px;
+
             letter-spacing: 3px;
+
             text-transform: uppercase;
         }
 
         .detail-header h2 {
-            font-size: clamp(32px, 6vw, 52px);
+            font-size:
+                clamp(34px, 6vw, 52px);
+
             font-weight: 400;
+
             margin: 10px 0;
+
+            color: #fff;
+
+            text-shadow:
+                0 5px 30px rgba(0,0,0,0.35);
         }
 
         .detail-header .date {
             color: #b88c98;
+
+            font-size: 14px;
         }
+
+
+        /* =========================================================
+           TEXTO DEL MOMENTO
+        ========================================================= */
 
         .detail-text {
             color: #eadce0;
-            line-height: 1.9;
+
+            line-height: 2;
+
             font-size: 17px;
-            max-width: 800px;
-            margin: 0 auto 40px;
+
+            max-width: 760px;
+
+            margin:
+                0 auto 40px;
+
             white-space: pre-line;
-            text-align: center;
+
+            text-align: left;
+
+            animation:
+                textAppear 0.7s ease;
         }
 
-        /* BOTÓN PARA MOSTRAR RECUERDOS */
+        .detail-text::first-letter {
+            color: #e4a0b2;
+
+            font-size: 1.5em;
+        }
+
+
+        /* =========================================================
+           BOTÓN RECUERDOS
+           SOLO MOMENTO 5
+        ========================================================= */
 
         .memory-toggle {
             display: block;
-            margin: 0 auto 25px;
-            padding: 12px 24px;
-            border: 1px solid rgba(216,140,160,0.45);
+
+            margin:
+                0 auto 25px;
+
+            padding:
+                12px 24px;
+
+            border:
+                1px solid rgba(216,140,160,0.45);
+
             border-radius: 999px;
-            background: rgba(216,140,160,0.10);
+
+            background:
+                rgba(216,140,160,0.10);
+
             color: #f4dbe1;
-            font-family: Georgia, 'Times New Roman', serif;
+
+            font-family:
+                Georgia,
+                'Times New Roman',
+                serif;
+
             font-size: 15px;
+
             letter-spacing: 0.5px;
+
             cursor: pointer;
-            transition: 0.3s ease;
+
+            transition:
+                0.3s ease;
         }
 
         .memory-toggle:hover {
-            background: rgba(216,140,160,0.20);
-            border-color: rgba(216,140,160,0.75);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.22);
+            background:
+                rgba(216,140,160,0.20);
+
+            border-color:
+                rgba(216,140,160,0.75);
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,0.25);
         }
 
         .memory-toggle:active {
-            transform: translateY(0);
+            transform:
+                translateY(0);
         }
 
-        /* GALERÍA */
+
+        /* =========================================================
+           GALERÍA
+        ========================================================= */
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
             gap: 18px;
         }
 
@@ -330,57 +808,172 @@
         }
 
         .gallery.revealed {
-            animation: galleryReveal 0.45s ease;
+            animation:
+                galleryReveal 0.45s ease;
         }
 
         .gallery img {
             width: 100%;
+
             height: 300px;
+
             object-fit: cover;
+
             border-radius: 15px;
-            transition: 0.3s;
+
+            transition:
+                transform 0.35s ease,
+                box-shadow 0.35s ease,
+                filter 0.35s ease;
+
             cursor: pointer;
-            background: #241016;
+
+            background:
+                #241016;
         }
 
         .gallery img:hover {
-            transform: scale(1.02);
+            transform:
+                scale(1.025);
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,0.35);
+
+            filter:
+                brightness(1.05);
         }
 
-        .empty-message {
-            color: #8e727a;
-            text-align: center;
-            padding: 50px;
+
+        /* =========================================================
+           OCULTAR
+        ========================================================= */
+
+        .hidden {
+            display: none !important;
         }
 
-        /* FOOTER */
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
 
         footer {
             text-align: center;
-            padding: 80px 20px;
+
+            padding:
+                80px 20px;
+
             color: #b89099;
+
+            position: relative;
+
+            z-index: 1;
         }
 
         footer .footer-heart {
             font-size: 35px;
+
             margin-bottom: 20px;
+
+            animation:
+                heartbeat 2.5s infinite;
         }
 
-        @keyframes galleryReveal {
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0d0509;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background:
+                #693344;
+
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background:
+                #8e4558;
+        }
+
+
+        /* =========================================================
+           ANIMACIONES
+        ========================================================= */
+
+        @keyframes heroGlow {
+
+            from {
+                transform: scale(0.95);
+                opacity: 0.5;
+            }
+
+            to {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @keyframes heroEntrance {
+
             from {
                 opacity: 0;
-                transform: translateY(12px);
+
+                transform:
+                    translateY(35px)
+                    scale(0.97);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
+
+                transform:
+                    translateY(0)
+                    scale(1);
             }
         }
 
-        /* ANIMACIONES */
+        @keyframes titleGlow {
+
+            from {
+                text-shadow:
+                    0 5px 25px rgba(0,0,0,0.35);
+            }
+
+            to {
+                text-shadow:
+                    0 5px 35px
+                    rgba(228,160,178,0.18);
+            }
+        }
+
+        @keyframes sectionAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
 
         @keyframes heartbeat {
+
             0%, 100% {
                 transform: scale(1);
             }
@@ -398,21 +991,160 @@
             }
         }
 
-        @keyframes appear {
+        @keyframes heartFloat {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
+        }
+
+        @keyframes floating {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(8px);
+            }
+        }
+
+        @keyframes tinyHeart {
+
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.17);
+            }
+        }
+
+        @keyframes dotPulse {
+
+            0%, 100% {
+                box-shadow:
+                    0 0 18px
+                    rgba(228,160,178,0.8),
+
+                    0 0 38px
+                    rgba(228,160,178,0.22);
+            }
+
+            50% {
+                box-shadow:
+                    0 0 23px
+                    rgba(228,160,178,1),
+
+                    0 0 52px
+                    rgba(228,160,178,0.35);
+            }
+        }
+
+        @keyframes modalBackground {
+
             from {
                 opacity: 0;
-                transform: translateY(25px) scale(0.97);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
             }
         }
 
-        /* RESPONSIVE */
+        @keyframes modalAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(30px)
+                    scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+            }
+        }
+
+        @keyframes textAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+        @keyframes galleryReveal {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
 
         @media (max-width: 750px) {
+
+            .hero h1 {
+                font-size: 46px;
+                letter-spacing: 1px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+            .hero-heart {
+                font-size: 48px;
+            }
+
+            .scroll-text {
+                margin-top: 48px;
+                font-size: 12px;
+            }
+
+            .timeline-section {
+                padding-top: 80px;
+            }
+
+            .timeline-title {
+                margin-bottom: 65px;
+            }
+
+            .timeline-title h2 {
+                font-size: 38px;
+            }
 
             .timeline::before {
                 left: 15px;
@@ -421,17 +1153,58 @@
             .moment,
             .moment:nth-child(even),
             .moment:nth-child(odd) {
+
                 width: 100%;
+
                 left: 0;
+
                 text-align: left;
+
                 padding-left: 45px;
+
                 padding-right: 0;
             }
 
             .moment:nth-child(odd) .timeline-dot,
             .moment:nth-child(even) .timeline-dot {
+
                 left: 6px;
                 right: auto;
+            }
+
+            .moment-card {
+                padding: 24px;
+            }
+
+            .moment-card h3 {
+                font-size: 25px;
+            }
+
+            .detail {
+                padding: 10px;
+            }
+
+            .detail-content {
+                padding: 30px 18px;
+
+                max-height: 95vh;
+
+                border-radius: 20px;
+            }
+
+            .detail-header {
+                padding:
+                    20px 25px 0;
+            }
+
+            .detail-header h2 {
+                font-size: 34px;
+            }
+
+            .detail-text {
+                font-size: 16px;
+
+                line-height: 1.9;
             }
 
             .gallery {
@@ -441,45 +1214,50 @@
             .gallery img {
                 height: 250px;
             }
-
-            .detail-content {
-                padding: 25px 18px;
-            }
-
-            .detail-header {
-                padding: 0 25px;
-            }
-
-            .hero h1 {
-                letter-spacing: 1px;
-            }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <!-- PORTADA -->
+
+    <!-- =========================================================
+         PORTADA
+    ========================================================== -->
 
     <section class="hero">
 
-        <div class="hero-heart">❤️</div>
+        <div class="hero-content">
 
-        <h1>Nuestra Historia</h1>
+            <div class="hero-heart">
+                ❤️
+            </div>
 
-        <p>
-            Cinco momentos, un montón de recuerdos
-            y una historia que todavía estamos escribiendo.
-        </p>
+            <h1>
+                Nuestra Historia
+            </h1>
 
-        <div class="scroll-text">
-            ↓ Desliza para comenzar ↓
+            <p>
+                Cinco momentos, un montón de recuerdos
+                y una historia que todavía estamos escribiendo.
+            </p>
+
+            <div class="scroll-text">
+                ↓ Desliza para comenzar ↓
+            </div>
+
         </div>
 
     </section>
 
 
-    <!-- LINEA DEL TIEMPO -->
+
+    <!-- =========================================================
+         LINEA DEL TIEMPO
+    ========================================================== -->
 
     <section class="timeline-section">
 
@@ -487,7 +1265,9 @@
 
             <div class="timeline-title">
 
-                <h2>Lo nuestro</h2>
+                <h2>
+                    Lo nuestro
+                </h2>
 
                 <p>
                     Cada momento guarda algo que quiero recordar.
@@ -496,51 +1276,98 @@
             </div>
 
 
-            <div class="timeline" id="timeline">
-
-                <!-- Los momentos se generan automáticamente con JS -->
-
-            </div>
+            <div
+                class="timeline"
+                id="timeline"
+            ></div>
 
         </div>
 
     </section>
 
 
-    <!-- VENTANA DE DETALLE -->
 
-    <div class="detail" id="detail">
+    <!-- =========================================================
+         MODAL
+    ========================================================== -->
+
+    <div
+        class="detail"
+        id="detail"
+    >
 
         <div class="detail-content">
 
-            <button class="close-btn" id="closeBtn">
+            <button
+                class="close-btn"
+                id="closeBtn"
+                aria-label="Cerrar"
+            >
                 ×
             </button>
 
+
             <div class="detail-header">
 
-                <div class="number" id="detailNumber"></div>
+                <div
+                    class="number"
+                    id="detailNumber"
+                ></div>
 
-                <h2 id="detailTitle"></h2>
+                <h2
+                    id="detailTitle"
+                ></h2>
 
-                <div class="date" id="detailDate"></div>
+                <div
+                    class="date"
+                    id="detailDate"
+                ></div>
 
             </div>
 
-            <div class="detail-text" id="detailText"></div>
 
-            <button class="memory-toggle" id="memoryToggle" type="button">
-                Ver recuerdos ❤️
+            <!-- =================================================
+                 TEXTO
+                 NO HAY IMAGEN AQUÍ
+            ================================================== -->
+
+            <div
+                class="detail-text"
+                id="detailText"
+            ></div>
+
+
+            <!-- =================================================
+                 BOTÓN SOLO MOMENTO 5
+            ================================================== -->
+
+            <button
+                class="memory-toggle hidden"
+                id="memoryToggle"
+                type="button"
+            >
+                Ver más recuerdos ❤️
             </button>
 
-            <div class="gallery collapsed" id="gallery"></div>
+
+            <!-- =================================================
+                 GALERÍA SOLO MOMENTO 5
+            ================================================== -->
+
+            <div
+                class="gallery collapsed hidden"
+                id="gallery"
+            ></div>
 
         </div>
 
     </div>
 
 
-    <!-- FOOTER -->
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
 
     <footer>
 
@@ -555,55 +1382,35 @@
     </footer>
 
 
+
     <script>
 
-        /*
-        ============================================================
-        DATOS DE LOS 5 MOMENTOS
-        ============================================================
 
-        Puedes cambiar:
-
-        title  = título
-        date   = fecha
-        text   = texto
-        images = hasta 4 imágenes
-
-        Las imágenes deben estar dentro de una carpeta llamada
-        "images".
-
-        Ejemplo:
-
-        proyecto/
-        │
-        ├── index.html
-        │
-        └── images/
-            ├── momento1-1.jpg
-            ├── momento1-2.jpg
-            ├── momento1-3.jpg
-            └── momento1-4.jpg
-        */
+        /* =========================================================
+           DATOS DE LOS 5 MOMENTOS
+        ========================================================= */
 
         const moments = [
 
             {
                 title: "Cuando todo comenzó",
+
                 date: "Nuestro comienzo",
+
                 text: `
-                    Aquí empezó algo que ninguno de los dos podía imaginar todo lo que llegaría a significar.
+Aquí empezó algo que ninguno de los dos podía imaginar todo lo que llegaría a significar.
 
-                    Tal vez en ese momento todavía no sabía lo importante que ibas a terminar siendo para mí. Todo comenzó con una imagen, con tu foto de perfil. Y, desde ese instante, hubo algo en mí que supo que tú ibas a ser la mujer de mi vida.
+Tal vez en ese momento todavía no sabía lo importante que ibas a terminar siendo para mí. Todo comenzó con una imagen, con tu foto de perfil. Y, desde ese instante, hubo algo en mí que supo que tú ibas a ser la mujer de mi vida.
 
-                    Pasaron muchos momentos antes de que finalmente pudiera hablar contigo, pero cuando por fin lo hice, descubrí que había mucho más de ti por conocer. No solo descubrí lo hermosa que eres, sino también la mujer que existe detrás de esa belleza: una mujer exquisita, con una mente que admiro y que, incluso desde entonces, comenzó a cautivarme de una manera que no sabía explicar.
+Pasaron muchos momentos antes de que finalmente pudiera hablar contigo, pero cuando por fin lo hice, descubrí que había mucho más de ti por conocer. No solo descubrí lo hermosa que eres, sino también la mujer que existe detrás de esa belleza: una mujer exquisita, con una mente que admiro y que, incluso desde entonces, comenzó a cautivarme de una manera que no sabía explicar.
 
-                    Y fue ahí cuando le prometí a Dios que tú ibas a ser mi mujer, mi esposa.
+Y fue ahí cuando le prometí a Dios que tú ibas a ser mi mujer, mi esposa.
 
-                    Una promesa que hice con el corazón, sin saber todavía todo lo que llegaríamos a vivir, pero sabiendo que, si algún día tenía la oportunidad de compartir mi vida contigo, quería hacerlo de verdad.
+Una promesa que hice con el corazón, sin saber todavía todo lo que llegaríamos a vivir, pero sabiendo que, si algún día tenía la oportunidad de compartir mi vida contigo, quería hacerlo de verdad.
 
-                    Y no pienso romper mi promesa.
-
+Y no pienso romper mi promesa.
                 `,
+
                 images: [
                     "images/momento1-1.jpg",
                     "images/momento1-2.jpg",
@@ -612,25 +1419,28 @@
                 ]
             },
 
+
             {
                 title: "Las primeras veces",
+
                 date: "Nuestros primeros recuerdos",
+
                 text: `
-                    La primera vez que te vi fue algo muy hermoso para mí. No podía creer que, en persona, fueras incluso más hermosa de lo que había imaginado. Te veías físicamente perfecta, y recuerdo pensar que era increíble que realmente estuviera logrando que una mujer como tú se enamorara de mí.
+La primera vez que te vi fue algo muy hermoso para mí. No podía creer que, en persona, fueras incluso más hermosa de lo que había imaginado. Te veías físicamente perfecta, y recuerdo pensar que era increíble que realmente estuviera logrando que una mujer como tú se enamorara de mí.
 
-                    Desde el principio, tu familia también me agradó muchísimo. Me hicieron sentir bienvenido y, de alguna manera, hicieron que aquel día se sintiera todavía más especial.
+Desde el principio, tu familia también me agradó muchísimo. Me hicieron sentir bienvenido y, de alguna manera, hicieron que aquel día se sintiera todavía más especial.
 
-                    Recuerdo mucho nuestra primera vez en Gran Plaza. Estábamos los dos tan nerviosos que hasta decidir qué comer se volvió complicado. Terminamos pidiendo pizza, como si no existiera ninguna otra opción en todo el centro comercial. Y, para rematar, tuve que dejar que fueras tú quien me diera el primer beso jajaja. Así de nervioso me tenías.
+Recuerdo mucho nuestra primera vez en Gran Plaza. Estábamos los dos tan nerviosos que hasta decidir qué comer se volvió complicado. Terminamos pidiendo pizza, como si no existiera ninguna otra opción en todo el centro comercial. Y, para rematar, tuve que dejar que fueras tú quien me diera el primer beso jajaja. Así de nervioso me tenías.
 
-                    Pero, aunque hubo nervios, silencios y momentos en los que ninguno sabía muy bien qué hacer, no tengo dudas de que fue una de las mejores tardes que he vivido.
+Pero, aunque hubo nervios, silencios y momentos en los que ninguno sabía muy bien qué hacer, no tengo dudas de que fue una de las mejores tardes que he vivido.
 
-                    Después pediste permiso para que pudiéramos ver juntos el partido de Colombia, y ese día terminó convirtiéndose en algo que todavía recuerdo con muchísimo cariño.
+Después pediste permiso para que pudiéramos ver juntos el partido de Colombia, y ese día terminó convirtiéndose en algo que todavía recuerdo con muchísimo cariño.
 
-                    Fue nuestro primer encuentro, y para mí, fue perfecto.
+Fue nuestro primer encuentro, y para mí, fue perfecto.
 
-                    A veces quisiera tener alguna imagen o alguna foto de ese día para poder volver a verlo, pero no la necesito realmente. Todas las imágenes de aquella tarde siguen guardadas en mi mente.
-
+A veces quisiera tener alguna imagen o alguna foto de ese día para poder volver a verlo, pero no la necesito realmente. Todas las imágenes de aquella tarde siguen guardadas en mi mente.
                 `,
+
                 images: [
                     "images/momento2-1.jpg",
                     "images/momento2-2.jpg",
@@ -639,11 +1449,14 @@
                 ]
             },
 
+
             {
                 title: "Lo que fuimos construyendo",
+
                 date: "Poco a poco",
+
                 text: `
-                    Con el tiempo empecé a sentir la necesidad de que lo nuestro tuviera un nombre, de que tú fueras oficialmente mi novia. No quería simplemente estar contigo; quería poder decirle a cualquiera, con todo el orgullo del mundo, que tú eras mi novia, que eras la mujer que había elegido para compartir mi vida.
+Con el tiempo empecé a sentir la necesidad de que lo nuestro tuviera un nombre, de que tú fueras oficialmente mi novia. No quería simplemente estar contigo; quería poder decirle a cualquiera, con todo el orgullo del mundo, que tú eras mi novia, que eras la mujer que había elegido para compartir mi vida.
 
 No sabía ni siquiera cómo decírtelo. Pensé en preparar una cena, quizá en un parque rodeado de zonas verdes, tal vez en tu casa con algunas decoraciones. Tenía tantas ideas en la cabeza que no sabía cuál sería la indicada.
 
@@ -668,8 +1481,8 @@ Y, de alguna manera, hasta eso hizo que el día fuera perfecto.
 Porque no fue perfecto porque todo saliera exactamente como lo había imaginado. Fue perfecto porque eras tú, porque estábamos juntos y porque, en medio de todo aquello, terminé entendiendo algo que quizá ya sabía desde antes, pero que ese día sentí con mucha más fuerza:
 
 Lo nuestro era algo realmente especial.
-
                 `,
+
                 images: [
                     "images/momento3-1.jpg",
                     "images/momento3-2.jpg",
@@ -678,11 +1491,14 @@ Lo nuestro era algo realmente especial.
                 ]
             },
 
+
             {
                 title: "Tú",
+
                 date: "Una de mis partes favoritas de nosotros",
+
                 text: `
-                    Luego está aquel día en el que hicimos el amor.
+Luego está aquel día en el que hicimos el amor.
 
 Antes de que sucediera hubo peleas, discusiones, desacuerdos, horarios que nunca parecían coincidir y, sobre todo, una mezcla de emociones que no sabía cómo manejar. Era mi primera vez, y durante la semana anterior sentí de todo: dudas, miedo, nervios y también muchas ganas. Pensaba demasiado en lo que iba a pasar, quizá porque no sabía cómo sería vivir algo así contigo.
 
@@ -701,8 +1517,8 @@ Y el deseo de amarnos, de sentirnos, de hacernos bien y de compartir algo que pe
 Para mí, eso es hacer el amor.
 
 Y fue contigo, por primera vez, que descubrí que podía sentirse así.
-
                 `,
+
                 images: [
                     "images/momento4-1.jpg",
                     "images/momento4-2.jpg",
@@ -711,11 +1527,14 @@ Y fue contigo, por primera vez, que descubrí que podía sentirse así.
                 ]
             },
 
+
             {
                 title: "Lo que viene",
+
                 date: "Nuestra historia continúa",
+
                 text: `
-                    Y ahora...
+Y ahora...
 
 Ahora vivimos la maduración de nuestra relación. Peleamos, discutimos, estamos tensos y, en otros momentos, somos intensos. A veces estamos bien, otras veces no tanto. Hemos tenido días fáciles y días difíciles, momentos en los que pareciera que todo fluye y otros en los que nos cuesta incluso entendernos.
 
@@ -738,8 +1557,8 @@ Y hoy no existe otra mujer a la que quiera amar.
 Solo tú.
 
 Mi niña linda.
-
                 `,
+
                 images: [
                     "img1.jpeg",
                     "img2.jpeg",
@@ -751,211 +1570,397 @@ Mi niña linda.
         ];
 
 
-        /*
-        ============================================================
-        GENERAR LA LINEA DEL TIEMPO
-        ============================================================
-        */
 
-        const timeline = document.getElementById("timeline");
+        /* =========================================================
+           ELEMENTOS
+        ========================================================= */
 
-        moments.forEach((moment, index) => {
+        const timeline =
+            document.getElementById("timeline");
 
-            const article = document.createElement("article");
+        const detail =
+            document.getElementById("detail");
 
-            article.className = "moment";
+        const closeBtn =
+            document.getElementById("closeBtn");
 
-            article.innerHTML = `
+        const detailNumber =
+            document.getElementById("detailNumber");
 
-                <div class="timeline-dot"></div>
+        const detailTitle =
+            document.getElementById("detailTitle");
 
-                <div class="moment-card" onclick="openMoment(${index})">
+        const detailDate =
+            document.getElementById("detailDate");
 
-                    <div class="moment-number">
-                        Momento ${index + 1}
+        const detailText =
+            document.getElementById("detailText");
+
+        const gallery =
+            document.getElementById("gallery");
+
+        const memoryToggle =
+            document.getElementById("memoryToggle");
+
+
+
+        /* =========================================================
+           GENERAR MOMENTOS
+        ========================================================= */
+
+        moments.forEach(
+            (moment, index) => {
+
+                const article =
+                    document.createElement("article");
+
+                article.className =
+                    "moment";
+
+                article.innerHTML = `
+
+                    <div class="timeline-dot"></div>
+
+                    <div
+                        class="moment-card"
+                        onclick="openMoment(${index})"
+                    >
+
+                        <div class="moment-number">
+
+                            Momento
+                            ${index + 1}
+
+                        </div>
+
+                        <h3>
+                            ${moment.title}
+                        </h3>
+
+                        <div class="moment-date">
+                            ${moment.date}
+                        </div>
+
+                        <p class="moment-hint">
+
+                            Descubre este recuerdo
+
+                            <span>
+                                ❤️
+                            </span>
+
+                        </p>
+
                     </div>
+                `;
 
-                    <h3>
-                        ${moment.title}
-                    </h3>
-
-                    <div class="moment-date">
-                        ${moment.date}
-                    </div>
-
-                    <p>
-                        Haz clic para recordar este momento ❤️
-                    </p>
-
-                </div>
-            `;
-
-            timeline.appendChild(article);
-
-        });
+                timeline.appendChild(article);
+            }
+        );
 
 
-        /*
-        ============================================================
-        ELEMENTOS DEL DETALLE
-        ============================================================
-        */
 
-        const detail = document.getElementById("detail");
-        const closeBtn = document.getElementById("closeBtn");
+        /* =========================================================
+           ANIMAR AL HACER SCROLL
+        ========================================================= */
 
-        const detailNumber = document.getElementById("detailNumber");
-        const detailTitle = document.getElementById("detailTitle");
-        const detailDate = document.getElementById("detailDate");
-        const detailText = document.getElementById("detailText");
-        const gallery = document.getElementById("gallery");
-        const memoryToggle = document.getElementById("memoryToggle");
+        const observer =
+            new IntersectionObserver(
+                (entries) => {
+
+                    entries.forEach(
+                        (entry) => {
+
+                            if (
+                                entry.isIntersecting
+                            ) {
+
+                                entry.target
+                                    .classList
+                                    .add("visible");
+
+                                observer.unobserve(
+                                    entry.target
+                                );
+                            }
+
+                        }
+                    );
+
+                },
+                {
+                    threshold: 0.12
+                }
+            );
 
 
-        /*
-        ============================================================
-        ABRIR MOMENTO
-        ============================================================
-        */
+        document
+            .querySelectorAll(".moment")
+            .forEach(
+                (moment) => {
+
+                    observer.observe(moment);
+
+                }
+            );
+
+
+
+        /* =========================================================
+           ABRIR MOMENTO
+        ========================================================= */
 
         function openMoment(index) {
 
-            const moment = moments[index];
+            const moment =
+                moments[index];
 
-            detailNumber.textContent = `Momento ${index + 1}`;
+            const isMomentFive =
+                index === 4;
 
-            detailTitle.textContent = moment.title;
 
-            detailDate.textContent = moment.date;
+            /* ---------------------------------
+               TEXTO
+            --------------------------------- */
 
-            detailText.textContent = moment.text;
+            detailNumber.textContent =
+                `Momento ${index + 1}`;
+
+            detailTitle.textContent =
+                moment.title;
+
+            detailDate.textContent =
+                moment.date;
+
+            detailText.textContent =
+                moment.text;
+
+
+            /* ---------------------------------
+               REINICIAR GALERÍA
+            --------------------------------- */
 
             gallery.innerHTML = "";
-            gallery.classList.remove("revealed");
-            gallery.classList.add("collapsed");
-            memoryToggle.textContent = "Ver recuerdos ❤️";
+
+            gallery.classList.add(
+                "collapsed"
+            );
+
+            gallery.classList.add(
+                "hidden"
+            );
 
 
-            /*
-            Solo mostramos imágenes que realmente existan
-            en el array.
-            */
+            /* ---------------------------------
+               BOTÓN SOLO MOMENTO 5
+            --------------------------------- */
 
-            moment.images.forEach((image) => {
+            if (isMomentFive) {
 
-                if (!image) return;
+                memoryToggle.classList.remove(
+                    "hidden"
+                );
 
-                const img = document.createElement("img");
+                gallery.classList.remove(
+                    "hidden"
+                );
 
-                img.src = image;
-
-                img.alt = moment.title;
-
-                img.onerror = function () {
-
-                    this.style.display = "none";
-
-                };
-
-                img.onclick = function () {
-
-                    window.open(image, "_blank");
-
-                };
-
-                gallery.appendChild(img);
-
-            });
+                memoryToggle.textContent =
+                    "Ver más recuerdos ❤️";
 
 
-            detail.classList.add("active");
+                moment.images
+                    .slice(1)
+                    .forEach(
+                        (image) => {
 
-            document.body.style.overflow = "hidden";
-        }
+                            if (!image) {
+                                return;
+                            }
+
+                            const img =
+                                document.createElement(
+                                    "img"
+                                );
+
+                            img.src =
+                                image;
+
+                            img.alt =
+                                `${moment.title} - recuerdo`;
 
 
-        /*
-        ============================================================
-        MOSTRAR / OCULTAR RECUERDOS
-        ============================================================
-        */
+                            img.onerror =
+                                function() {
 
-        memoryToggle.addEventListener("click", function() {
+                                    this.style.display =
+                                        "none";
 
-            const isCollapsed = gallery.classList.contains("collapsed");
+                                };
 
-            if (isCollapsed) {
 
-                gallery.classList.remove("collapsed");
-                gallery.classList.remove("revealed");
+                            img.onclick =
+                                function() {
 
-                // Reinicia la animación al abrir.
-                void gallery.offsetWidth;
+                                    window.open(
+                                        image,
+                                        "_blank"
+                                    );
 
-                gallery.classList.add("revealed");
+                                };
 
-                memoryToggle.textContent = "Ocultar recuerdos ↑";
+
+                            gallery.appendChild(
+                                img
+                            );
+
+                        }
+                    );
 
             } else {
 
-                gallery.classList.remove("revealed");
-                gallery.classList.add("collapsed");
-
-                memoryToggle.textContent = "Ver recuerdos ❤️";
+                memoryToggle.classList.add(
+                    "hidden"
+                );
 
             }
 
-        });
+
+            /* ---------------------------------
+               ABRIR MODAL
+            --------------------------------- */
+
+            detail.classList.add(
+                "active"
+            );
+
+            document.body.classList.add(
+                "modal-open"
+            );
 
 
-        /*
-        ============================================================
-        CERRAR
-        ============================================================
-        */
-
-        function closeMoment() {
-
-            detail.classList.remove("active");
-
-            document.body.style.overflow = "";
-
+            document
+                .querySelector(".detail-content")
+                .scrollTop = 0;
         }
 
 
-        closeBtn.addEventListener("click", closeMoment);
+
+        /* =========================================================
+           MOSTRAR / OCULTAR RECUERDOS
+        ========================================================= */
+
+        memoryToggle.addEventListener(
+            "click",
+            function() {
+
+                const isCollapsed =
+                    gallery.classList.contains(
+                        "collapsed"
+                    );
 
 
-        /*
-        Cerrar haciendo clic fuera de la ventana
-        */
+                if (isCollapsed) {
 
-        detail.addEventListener("click", function(event) {
+                    gallery.classList.remove(
+                        "collapsed"
+                    );
 
-            if (event.target === detail) {
+                    gallery.classList.remove(
+                        "revealed"
+                    );
 
-                closeMoment();
+                    void gallery.offsetWidth;
+
+                    gallery.classList.add(
+                        "revealed"
+                    );
+
+                    memoryToggle.textContent =
+                        "Ocultar recuerdos ↑";
+
+                } else {
+
+                    gallery.classList.add(
+                        "collapsed"
+                    );
+
+                    gallery.classList.remove(
+                        "revealed"
+                    );
+
+                    memoryToggle.textContent =
+                        "Ver más recuerdos ❤️";
+                }
 
             }
+        );
 
-        });
 
 
-        /*
-        Cerrar con ESC
-        */
+        /* =========================================================
+           CERRAR MODAL
+        ========================================================= */
 
-        document.addEventListener("keydown", function(event) {
+        function closeMoment() {
 
-            if (event.key === "Escape") {
+            detail.classList.remove(
+                "active"
+            );
 
-                closeMoment();
+            document.body.classList.remove(
+                "modal-open"
+            );
+        }
+
+
+        closeBtn.addEventListener(
+            "click",
+            closeMoment
+        );
+
+
+        /* =========================================================
+           CERRAR AL HACER CLICK FUERA
+        ========================================================= */
+
+        detail.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    event.target === detail
+                ) {
+
+                    closeMoment();
+
+                }
 
             }
+        );
 
-        });
+
+        /* =========================================================
+           CERRAR CON ESC
+        ========================================================= */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeMoment();
+
+                }
+
+            }
+        );
 
     </script>
 
 </body>
+
 </html>
